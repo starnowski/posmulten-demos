@@ -17,6 +17,9 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    protected JdbcTemplate ownerJdbcTemplate;
+
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED),
@@ -29,7 +32,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        int result = TestUtils.countNumberOfRecordsWhereByTenantId(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", "xds");
+        int result = TestUtils.countNumberOfRecordsWhereByTenantId(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'");
 
         // then
         assertThat(result).isEqualTo(1);
@@ -47,7 +50,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        int result = TestUtils.countNumberOfRecordsWhereByTenantId(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", "xds1");
+        int result = TestUtils.countNumberOfRecordsWhereByTenantId(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'");
 
         // then
         assertThat(result).isZero();
