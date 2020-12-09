@@ -1,0 +1,7 @@
+TRUNCATE user_role CASCADE;
+TRUNCATE user_info CASCADE;
+TRUNCATE tenant_info CASCADE;
+TRUNCATE posts CASCADE;
+TRUNCATE comments CASCADE;
+
+

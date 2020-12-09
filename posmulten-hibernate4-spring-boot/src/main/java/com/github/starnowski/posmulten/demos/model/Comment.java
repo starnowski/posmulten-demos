@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Accessors(chain = true)
-@Table(name = "posts")
+@Table(name = "comments")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class Comment {
