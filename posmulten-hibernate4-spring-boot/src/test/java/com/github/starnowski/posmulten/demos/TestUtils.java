@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.demos;
 
+import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.StatementCallback;
@@ -24,5 +25,9 @@ public class TestUtils {
                 return rs.getInt(1);
             }
         });
+    }
+
+    public static String statementSettingCurrentTenantVariable(ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory, String tenantId) {
+        return setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(tenantId);
     }
 }
