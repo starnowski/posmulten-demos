@@ -111,7 +111,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        jdbcTemplate.execute(statementSettingCurrentTenantVariable("xds") + "DELETE FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'");
+        jdbcTemplate.execute(statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds") + "DELETE FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'");
 
         // then
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isZero();

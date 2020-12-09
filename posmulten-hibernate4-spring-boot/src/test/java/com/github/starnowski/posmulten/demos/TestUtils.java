@@ -11,6 +11,9 @@ import java.sql.Statement;
 
 public class TestUtils {
 
+    public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/clean-database.sql";
+    public static final String TEST_BASIC_DATA_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/test-basic-data.sql";
+
     public static int countNumberOfRecordsWhere(JdbcTemplate jdbcTemplate, String table, String condition)
     {
         return countNumberOfRecordsWhereByTenantId(jdbcTemplate, table, condition);
