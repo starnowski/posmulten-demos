@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class PosmultenConfiguration {
 
-
     @Bean
     public ISharedSchemaContext iSharedSchemaContext() throws SharedSchemaContextBuilderException {
         DefaultSharedSchemaContextBuilder defaultSharedSchemaContextBuilder = new DefaultSharedSchemaContextBuilder(null); // null schema --> public schema
