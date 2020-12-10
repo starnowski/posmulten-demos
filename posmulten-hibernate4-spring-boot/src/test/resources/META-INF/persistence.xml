@@ -5,5 +5,8 @@
     <persistence-unit name="pu" transaction-type="JTA">
     </persistence-unit>
     <persistence-unit name="spu" transaction-type="RESOURCE_LOCAL">
+        <properties>
+            <property name="hibernate.hbm2ddl.aut" value="create"/>
+        </properties>
     </persistence-unit>
 </persistence>

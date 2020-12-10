@@ -16,6 +16,9 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @Configuration
 public class DataSourceConfiguration {
@@ -83,11 +86,14 @@ public class DataSourceConfiguration {
             EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             @Qualifier("ownerDataSource") DataSource ownerDataSource,
             JpaProperties jpaProperties) {
+        Map<String, String> properties = new HashMap<>(jpaProperties.getProperties());
+        properties.put("hibernate.hbm2ddl.auto", "create");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return entityManagerFactoryBuilder
                 .dataSource(ownerDataSource)
                 .jta(false)
                 .persistenceUnit("spu")
-                .properties(jpaProperties.getProperties())
+                .properties(properties)
                 .build();
     }
 
@@ -98,5 +104,12 @@ public class DataSourceConfiguration {
         jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
         return jpaTransactionManager;
     }
+    //https://www.baeldung.com/spring-data-jpa-multiple-databases
+//    Properties additionalProperties() {
+//        Properties properties = new Properties();
+//        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+//        return properties;
+//    }
 
 }
