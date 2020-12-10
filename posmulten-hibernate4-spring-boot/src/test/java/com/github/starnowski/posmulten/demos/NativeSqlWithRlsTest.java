@@ -1,9 +1,12 @@
 package com.github.starnowski.posmulten.demos;
 
+import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -20,10 +23,19 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     protected JdbcTemplate jdbcTemplate;
 
     @Autowired
+    @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate;
 
     @Autowired
+    protected ISharedSchemaContext iSharedSchemaContext;
+
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
+
+    @Before
+    public void setUp()
+    {
+        setCurrentTenantIdFunctionInvocationFactory = iSharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
+    }
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
