@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -18,12 +19,11 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Configuration
 public class DataSourceConfiguration {
 
-    public static final String OWNER_TRANSANCTION_MANAGER = "ownerTransanctionManager";
+    public static final String OWNER_TRANSACTION_MANAGER = "ownerTransanctionManager";
 
     @Bean
     @Primary
@@ -97,12 +97,10 @@ public class DataSourceConfiguration {
                 .build();
     }
 
-    @Bean(name = OWNER_TRANSANCTION_MANAGER)
-    public PlatformTransactionManager ownerTransanctionManager(
-            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
-        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-        jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
-        return jpaTransactionManager;
+    @Bean(name = OWNER_TRANSACTION_MANAGER)
+    public PlatformTransactionManager ownerTransactionManager(
+            @Qualifier("ownerDataSource") DataSource ownerDataSource) {
+        return new DataSourceTransactionManager(ownerDataSource);
     }
     //https://www.baeldung.com/spring-data-jpa-multiple-databases
 //    Properties additionalProperties() {
