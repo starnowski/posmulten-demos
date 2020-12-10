@@ -12,6 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import static com.github.starnowski.posmulten.demos.TestUtils.statementSettingCurrentTenantVariable;
+import static com.github.starnowski.posmulten.demos.hibernate.configurations.DataSourceConfiguration.OWNER_TRANSANCTION_MANAGER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -39,10 +40,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSANCTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSANCTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldReadRecordFromSameTenant() {
         // given
