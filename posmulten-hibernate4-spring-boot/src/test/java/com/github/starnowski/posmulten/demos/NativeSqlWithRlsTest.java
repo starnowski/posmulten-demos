@@ -58,10 +58,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldNotAbleToReadRecordFromOtherTenant() {
         // given
@@ -76,10 +76,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldUpdateRecordForSameTenant() {
         // given
@@ -95,10 +95,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldNotAbleToUpdateRecordFromOtherTenant() {
         // given
@@ -114,10 +114,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldDeleteRecordForSameTenant() {
         // given
@@ -132,10 +132,10 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
     @Test
     @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource"),
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = AFTER_TEST_METHOD)
     public void shouldNotAbleToDeleteRecordFromOtherTenant() {
         // given
