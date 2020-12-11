@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.demos.hibernate.configurations;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,7 +21,7 @@ import java.util.Map;
 @Configuration
 public class DataSourceConfiguration {
 
-    public static final String OWNER_TRANSACTION_MANAGER = "ownerTransanctionManager";
+    public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
 
     @Bean
     @Primary
@@ -65,21 +63,22 @@ public class DataSourceConfiguration {
 
     //
 
-    @Bean @Primary @Autowired
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) { return new JpaTransactionManager(emf); }
-
-    @Bean @Primary
+    @Bean(name = "emfBean")
+    @Primary
     public LocalContainerEntityManagerFactoryBean emfBean(
             EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             DataSource datasource,
             JpaProperties jpaProperties) {
         return entityManagerFactoryBuilder
                 .dataSource(datasource)
-                .jta(true)
+                .jta(false)
                 .persistenceUnit("pu")
                 .properties(jpaProperties.getProperties())
                 .build();
     }
+
+    @Bean @Primary
+    public PlatformTransactionManager transactionManager(@Qualifier("emfBean") EntityManagerFactory emf) { return new JpaTransactionManager(emf); }
 
     @Bean(name = "schema_emf")
     public LocalContainerEntityManagerFactoryBean emfSchemaBean(
@@ -99,15 +98,10 @@ public class DataSourceConfiguration {
 
     @Bean(name = OWNER_TRANSACTION_MANAGER)
     public PlatformTransactionManager ownerTransactionManager(
-            @Qualifier("ownerDataSource") DataSource ownerDataSource) {
-        return new DataSourceTransactionManager(ownerDataSource);
+            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
+        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+        jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
+        return jpaTransactionManager;
     }
     //https://www.baeldung.com/spring-data-jpa-multiple-databases
-//    Properties additionalProperties() {
-//        Properties properties = new Properties();
-//        properties.setProperty("hibernate.hbm2ddl.auto", "create");
-//        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-//        return properties;
-//    }
-
 }
