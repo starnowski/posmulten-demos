@@ -69,11 +69,14 @@ public class DataSourceConfiguration {
             EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             DataSource datasource,
             JpaProperties jpaProperties) {
+        Map<String, String> properties = new HashMap<>(jpaProperties.getProperties());
+        properties.put("hibernate.hbm2ddl.auto", "none");
+        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         return entityManagerFactoryBuilder
                 .dataSource(datasource)
                 .jta(false)
                 .persistenceUnit("pu")
-                .properties(jpaProperties.getProperties())
+                .properties(properties)
                 .build();
     }
 
