@@ -23,9 +23,9 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     @Autowired
     protected JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    @Qualifier("ownerJdbcTemplate")
-    protected JdbcTemplate ownerJdbcTemplate;
+//    @Autowired
+//    @Qualifier("ownerJdbcTemplate")
+//    protected JdbcTemplate ownerJdbcTemplate;
 
     @Autowired
     protected ISharedSchemaContext iSharedSchemaContext;
@@ -39,12 +39,12 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
-            executionPhase = BEFORE_TEST_METHOD)
-    @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
-            executionPhase = AFTER_TEST_METHOD)
+//    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+//            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+//            executionPhase = BEFORE_TEST_METHOD)
+//    @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
+//            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+//            executionPhase = AFTER_TEST_METHOD)
     public void shouldReadRecordFromSameTenant() {
         // given
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(jdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
