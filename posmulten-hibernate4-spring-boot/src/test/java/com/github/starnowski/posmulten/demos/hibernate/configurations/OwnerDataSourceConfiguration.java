@@ -57,6 +57,7 @@ public class OwnerDataSourceConfiguration {
                 .jta(false)
                 .persistenceUnit("spu")
                 .properties(properties)
+                .packages("com.github.starnowski.posmulten.demos.model")
                 .build();
         HibernateJpaVendorAdapter vendor = new HibernateJpaVendorAdapter();
         vendor.setGenerateDdl(true);

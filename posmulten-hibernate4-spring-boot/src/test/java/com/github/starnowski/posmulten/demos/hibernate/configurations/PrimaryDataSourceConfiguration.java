@@ -55,6 +55,7 @@ public class PrimaryDataSourceConfiguration {
         return entityManagerFactoryBuilder
                 .dataSource(datasource)
                 .jta(false)
+                .packages("com.github.starnowski.posmulten.demos.model")
                 .persistenceUnit("pu")
                 .properties(properties)
                 .build();
