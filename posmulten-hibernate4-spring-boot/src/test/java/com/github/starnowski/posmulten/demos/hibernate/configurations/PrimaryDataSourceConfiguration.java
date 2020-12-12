@@ -53,12 +53,7 @@ public class PrimaryDataSourceConfiguration {
             JpaProperties jpaProperties) {
         Map<String, String> properties = new HashMap<>(jpaProperties.getProperties());
         properties.put("hibernate.hbm2ddl.auto", "none");
-//        properties.put("hibernate.hbm2ddl.auto", "create");
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.physical_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy");
-        properties.put("hibernate.transaction.jta.platform", null);
-        properties.put("hibernate.implicit_naming_strategy", "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy");
-        properties.put("hibernate.id.new_generator_mappings", "false");
         LocalContainerEntityManagerFactoryBean bean = entityManagerFactoryBuilder
                 .dataSource(datasource)
                 .jta(false)
@@ -72,9 +67,6 @@ public class PrimaryDataSourceConfiguration {
         bean.setJpaVendorAdapter(vendorAdapter);
         return bean;
     }
-//
-//    @Bean @Primary
-//    public PlatformTransactionManager transactionManager(@Qualifier("emfBean") EntityManagerFactory emf) { return new JpaTransactionManager(emf); }
 
     @Bean
     @Primary

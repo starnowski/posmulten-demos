@@ -68,14 +68,9 @@ public class OwnerDataSourceConfiguration {
 
     @Bean(name = OWNER_TRANSACTION_MANAGER)
     public PlatformTransactionManager ownerTransactionManager(
-            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean,
-            JpaProperties jpaProperties) {
+            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
         jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
-        Map<String, String> properties = new HashMap<>(jpaProperties.getProperties());
-        properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put("hibernate.ddl-auto", "create");
-        jpaTransactionManager.setJpaPropertyMap(properties);
         return jpaTransactionManager;
     }
 }
