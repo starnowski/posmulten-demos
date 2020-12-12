@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.demos.model;
 
+import com.github.starnowski.posmulten.demos.util.TenantAware;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.UUID;
 @Table(name = "user_info")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
-public class User {
+public class User extends TenantAware {
 
     @Id
     @GeneratedValue

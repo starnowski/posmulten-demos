@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.demos.model;
 
 
+import com.github.starnowski.posmulten.demos.util.TenantAware;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "comments")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Comment {
+public class Comment extends TenantAware {
     @Id
     @GeneratedValue
     private long id;

@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.demos.model;
 
 import com.github.starnowski.posmulten.demos.util.RoleEnum;
+import com.github.starnowski.posmulten.demos.util.TenantAware;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "user_role")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class UserRole {
+public class UserRole extends TenantAware {
     @Id
     @GeneratedValue
     private long id;
