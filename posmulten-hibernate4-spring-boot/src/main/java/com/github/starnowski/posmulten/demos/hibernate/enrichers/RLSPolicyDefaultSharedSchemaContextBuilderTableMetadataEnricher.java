@@ -26,7 +26,7 @@ public class RLSPolicyDefaultSharedSchemaContextBuilderTableMetadataEnricher imp
         PersistentClass persistentClass = pClass.get();
         if (TenantAware.class.isAssignableFrom(persistentClass.getMappedClass())) {
             TenantAwareTypeProperties properties = TenantAwareTypeProperties.valueOf(persistentClass, table);
-            String policyName = NameGenerator.generate(64, "rls_policy_", properties.getTable(), table.getSchema()); //TODO Issue with tenant column
+            String policyName = NameGenerator.generate(64, "rls_policy_", properties.getTable(), table.getSchema());
             builder.createRLSPolicyForTable(properties.getTable(), properties.getPrimaryKeysColumnAndTypeMap(), properties.getTenantColumnName(), policyName);
         }
         return builder;

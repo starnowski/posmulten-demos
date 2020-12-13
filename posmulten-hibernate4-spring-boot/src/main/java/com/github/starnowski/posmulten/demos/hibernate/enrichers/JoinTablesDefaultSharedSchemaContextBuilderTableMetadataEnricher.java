@@ -22,7 +22,7 @@ public class JoinTablesDefaultSharedSchemaContextBuilderTableMetadataEnricher im
             return builder;
         }
         builder.createTenantColumnForTable(table.getName());
-        String policyName = NameGenerator.generate(64, "rls_policy_", table.getName(), table.getSchema());
+        String policyName = NameGenerator.generate(64, "rls_policy_", table.getName(), table.getSchema()); //TODO Issue with tenant column
         builder.createRLSPolicyForTable(table.getName(), new HashMap<>(), "tenant_id", policyName);
         return builder;
     }
