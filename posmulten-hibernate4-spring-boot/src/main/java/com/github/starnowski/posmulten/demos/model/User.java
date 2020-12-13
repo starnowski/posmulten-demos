@@ -19,6 +19,7 @@ public class User extends TenantAware {
 
     @Id
     @GeneratedValue
+    @Column(name = "user_id")
     private UUID userId;
     private String username;
     private String password;
