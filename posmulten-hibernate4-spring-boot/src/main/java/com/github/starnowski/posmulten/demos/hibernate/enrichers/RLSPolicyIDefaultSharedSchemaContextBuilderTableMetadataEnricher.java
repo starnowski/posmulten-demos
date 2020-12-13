@@ -16,6 +16,9 @@ import java.util.Optional;
 public class RLSPolicyIDefaultSharedSchemaContextBuilderTableMetadataEnricher implements IDefaultSharedSchemaContextBuilderTableMetadataEnricher {
     @Override
     public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, Metadata metadata, Table table) {
+        if (!table.isPhysicalTable()) {
+            return builder;
+        }
         Optional<PersistentClass> pClass = metadata.getEntityBindings().stream().filter(persistentClass -> table.equals(persistentClass.getTable())).findFirst();
         if (!pClass.isPresent()) {
             return builder;
