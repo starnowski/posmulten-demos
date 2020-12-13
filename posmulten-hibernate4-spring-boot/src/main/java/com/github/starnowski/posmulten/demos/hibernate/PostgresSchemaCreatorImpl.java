@@ -5,15 +5,12 @@ import com.github.starnowski.posmulten.postgresql.core.context.DefaultSharedSche
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.context.exceptions.SharedSchemaContextBuilderException;
 import org.hibernate.boot.Metadata;
-import org.hibernate.boot.model.relational.Exportable;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.tool.schema.internal.SchemaCreatorImpl;
 import org.hibernate.tool.schema.spi.SchemaManagementException;
 import org.hibernate.tool.schema.spi.Target;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 
@@ -37,14 +34,6 @@ public class PostgresSchemaCreatorImpl extends SchemaCreatorImpl {
         } catch (SharedSchemaContextBuilderException e) {
             throw  new SchemaManagementException("Invalid shared schema context creation", e);
         }
-    }
-
-    private static void checkExportIdentifier(Exportable exportable, Set<String> exportIdentifiers) {
-        final String exportIdentifier = exportable.getExportIdentifier();
-        if (exportIdentifiers.contains(exportIdentifier)) {
-            throw new SchemaManagementException("SQL strings added more than once for: " + exportIdentifier);
-        }
-        exportIdentifiers.add(exportIdentifier);
     }
 
     private static void applySqlStrings(Target[] targets, String... sqlStrings) {
