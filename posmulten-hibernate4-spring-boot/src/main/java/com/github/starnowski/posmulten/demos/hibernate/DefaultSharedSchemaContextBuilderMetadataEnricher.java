@@ -8,7 +8,7 @@ import org.hibernate.dialect.Dialect;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
 import org.hibernate.mapping.ForeignKey;
 import org.hibernate.mapping.Table;
-import org.hibernate.tool.schema.spi.Target;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -16,7 +16,10 @@ import java.util.*;
 @Component
 public class DefaultSharedSchemaContextBuilderMetadataEnricher {
 
-    public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, Metadata metadata, Dialect dialect, Target... targets)
+    @Autowired
+    private List<IDefaultSharedSchemaContextBuilderTableMetadataEnricher> enrichers;
+
+    public DefaultSharedSchemaContextBuilder enrich(DefaultSharedSchemaContextBuilder builder, Metadata metadata, Dialect dialect)
     {
         final Database database = metadata.getDatabase();
         final Set<String> exportIdentifiers = new HashSet<>(50);

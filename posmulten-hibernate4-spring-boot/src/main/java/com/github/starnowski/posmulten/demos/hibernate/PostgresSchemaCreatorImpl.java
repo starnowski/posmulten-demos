@@ -30,7 +30,7 @@ public class PostgresSchemaCreatorImpl extends SchemaCreatorImpl {
     public void doCreation(Metadata metadata, boolean createNamespaces, Dialect dialect, Target... targets) throws SchemaManagementException {
         super.doCreation(metadata, createNamespaces, dialect, targets);
         DefaultSharedSchemaContextBuilder builder = builderFactory.build();
-        builder = defaultSharedSchemaContextBuilderMetadataEnricher.enrich(builder, metadata, dialect, targets);
+        builder = defaultSharedSchemaContextBuilderMetadataEnricher.enrich(builder, metadata, dialect);
         try {
             ISharedSchemaContext context = builder.build();
             applySqlStrings(targets, context.getSqlDefinitions().stream().map(SQLDefinition::getCreateScript).collect(toList()).toArray(new String[0]));
