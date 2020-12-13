@@ -30,6 +30,6 @@ public class Post extends TenantAware {
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments;
 
-    @ManyToMany(mappedBy = "posts")
+    @ManyToMany
     private Set<Category> categories;
 }
