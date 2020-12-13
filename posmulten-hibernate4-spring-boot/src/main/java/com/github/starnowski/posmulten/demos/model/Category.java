@@ -12,24 +12,18 @@ import java.util.Set;
 @Data
 @Entity
 @Accessors(chain = true)
-@Table(name = "posts")
+@Table(name = "categories")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Post extends TenantAware {
+public class Category extends TenantAware {
 
     @Id
     @GeneratedValue
     private long id;
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User author;
 
-    @Column(columnDefinition = "text")
+    @Column
     private String text;
 
-    @OneToMany(mappedBy = "post")
-    private Set<Comment> comments;
-
-    @ManyToMany(mappedBy = "posts")
-    private Set<Category> categories;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Post> posts;
 }

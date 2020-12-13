@@ -24,4 +24,6 @@ public class Comment extends TenantAware {
     private User author;
     @ManyToOne
     private Post post;
+    @Column(columnDefinition = "text")
+    private String text;
 }
