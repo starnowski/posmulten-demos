@@ -30,6 +30,26 @@ public class TestUtils {
         });
     }
 
+    public static int returnIntForStatement(JdbcTemplate jdbcTemplate, String selectStatement)
+    {
+        return returnIntForStatement(jdbcTemplate, selectStatement, null);
+    }
+
+    public static int returnIntForStatement(JdbcTemplate jdbcTemplate, String selectStatement, String setCurrentTenantIdStatement)
+    {
+        return jdbcTemplate.execute(new StatementCallback<Integer>() {
+            @Override
+            public Integer doInStatement(Statement statement) throws SQLException, DataAccessException {
+                if (setCurrentTenantIdStatement != null)
+                {
+                    statement.execute(setCurrentTenantIdStatement);
+                }
+                ResultSet rs = statement.executeQuery(selectStatement);rs.next();
+                return rs.getInt(1);
+            }
+        });
+    }
+
     public static String statementSettingCurrentTenantVariable(ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory, String tenantId) {
         return setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(tenantId);
     }
