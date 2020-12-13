@@ -16,11 +16,14 @@ public class TenantAwareTypeProperties {
     private Map<String, String> primaryKeysColumnAndTypeMap = new HashMap<>();
     private String tenantColumnName;
 
-    public TenantAwareTypeProperties valueOf(PersistentClass persistentClass, Table table)
+    public static TenantAwareTypeProperties valueOf(PersistentClass persistentClass, Table table)
     {
         TenantAwareTypeProperties result = new TenantAwareTypeProperties();
         result.setTable(table.getName());
         result.setTenantColumnName("tenant_id");//TODO Resolve by adnotation or null
+        table.getPrimaryKey().getColumnIterator().forEachRemaining(column ->
+                result.getPrimaryKeysColumnAndTypeMap().put(column.getName(), column.getSqlType())
+        );
         return result;
     }
 }
