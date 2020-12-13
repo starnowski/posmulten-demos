@@ -36,6 +36,7 @@ public class DefaultSharedSchemaContextBuilderMetadataEnricher {
                 if (!table.isPhysicalTable()) {
                     continue;
                 }
+                enrichers.forEach(enricher -> enricher.enrich(builder, metadata, table));
 //                applySqlStrings(
 //                        targets,
 //                        new PostgresRlsPolicyForEntityExporter(databaseProperties.getUser()).getSqlCreateStrings(table, metadata)
