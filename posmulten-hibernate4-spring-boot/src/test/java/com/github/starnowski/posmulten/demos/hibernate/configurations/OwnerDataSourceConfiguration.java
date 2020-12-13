@@ -56,8 +56,6 @@ public class OwnerDataSourceConfiguration {
             @Autowired PostgresRLSlHibernateSchemaManagementTool postgresRLSlHibernateSchemaManagementTool) {
         Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
         properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-
         properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.NONE);
         properties.put(SCHEMA_MANAGEMENT_TOOL, postgresRLSlHibernateSchemaManagementTool);
 
