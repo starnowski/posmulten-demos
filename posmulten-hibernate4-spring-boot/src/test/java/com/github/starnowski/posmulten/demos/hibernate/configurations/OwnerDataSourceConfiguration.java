@@ -1,5 +1,9 @@
 package com.github.starnowski.posmulten.demos.hibernate.configurations;
 
+import com.github.starnowski.posmulten.demos.hibernate.PostgresRLSlHibernateSchemaManagementTool;
+import org.hibernate.MultiTenancyStrategy;
+import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -20,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.github.starnowski.posmulten.demos.hibernate.configurations.DataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
+import static org.hibernate.cfg.AvailableSettings.SCHEMA_MANAGEMENT_TOOL;
 
 @EnableTransactionManagement
 @Configuration
@@ -47,10 +52,14 @@ public class OwnerDataSourceConfiguration {
     public LocalContainerEntityManagerFactoryBean emfSchemaBean(
             EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             @Qualifier("ownerDataSource") DataSource ownerDataSource,
-            JpaProperties jpaProperties) {
-        Map<String, String> properties = new HashMap<>(jpaProperties.getProperties());
+            JpaProperties jpaProperties,
+            @Autowired PostgresRLSlHibernateSchemaManagementTool postgresRLSlHibernateSchemaManagementTool) {
+        Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
         properties.put("hibernate.hbm2ddl.auto", "create");
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+
+        properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.NONE);
+        properties.put(SCHEMA_MANAGEMENT_TOOL, postgresRLSlHibernateSchemaManagementTool);
 
         LocalContainerEntityManagerFactoryBean bean = entityManagerFactoryBuilder
                 .dataSource(ownerDataSource)
