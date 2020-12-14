@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -23,4 +24,6 @@ public class User extends TenantAware {
     private UUID userId;
     private String username;
     private String password;
+    @OneToMany
+    private Set<UserRole> roles;
 }

@@ -9,7 +9,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     User findByUserId(UUID userId);
 
-    User findByUsername(UUID userId);
+    User findByUsername(String username);
 
     void deleteByUserId(UUID userId);
 }
