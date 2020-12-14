@@ -12,7 +12,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
 import static com.github.starnowski.posmulten.demos.TestUtils.statementSettingCurrentTenantVariable;
-import static com.github.starnowski.posmulten.demos.hibernate.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
+import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;

@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.demos.hibernate.configurations;
+package com.github.starnowski.posmulten.demos.configurations;
 
 import com.github.starnowski.posmulten.demos.hibernate.PostgresRLSlHibernateSchemaManagementTool;
 import org.hibernate.MultiTenancyStrategy;
