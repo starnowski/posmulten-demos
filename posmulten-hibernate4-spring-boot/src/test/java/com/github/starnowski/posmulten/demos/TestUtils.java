@@ -11,6 +11,7 @@ import java.sql.Statement;
 
 public class TestUtils {
 
+    public static final String GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/grant-access-to-db-user.sql";
     public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/clean-database.sql";
     public static final String TEST_BASIC_DATA_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/test-basic-data.sql";
 

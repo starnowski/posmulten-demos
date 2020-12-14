@@ -39,7 +39,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
@@ -57,7 +57,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
@@ -75,7 +75,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
@@ -94,7 +94,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
@@ -113,7 +113,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
@@ -131,7 +131,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
