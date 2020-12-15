@@ -48,9 +48,9 @@ public class PrimaryDataSourceConfiguration {
         return new JdbcTemplate(primaryDataSource());
     }
 
-    @Bean(name = "emfBean")
+    @Bean(name = "entityManagerFactory")
     @Primary
-    public LocalContainerEntityManagerFactoryBean emfBean(
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             @Autowired EntityManagerFactoryBuilder entityManagerFactoryBuilder,
             @Autowired DataSource datasource,
             @Autowired JpaProperties jpaProperties,
