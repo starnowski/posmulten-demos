@@ -12,4 +12,8 @@ public class TenantContext {
     public static void setCurrentTenant(String tenant) {
         currentTenant.set(tenant);
     }
+
+    public static void setInvalidTenant() {
+        currentTenant.set(INVALID_TENANT_ID);
+    }
 }
