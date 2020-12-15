@@ -23,12 +23,13 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.github.starnowski.posmulten.demos.hibernate.configurations.DataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static org.hibernate.cfg.AvailableSettings.SCHEMA_MANAGEMENT_TOOL;
 
 @EnableTransactionManagement
 @Configuration
 public class OwnerDataSourceConfiguration {
+
+    public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
 
     @Bean
     @ConfigurationProperties("spring.datasource.owner")
@@ -73,7 +74,7 @@ public class OwnerDataSourceConfiguration {
         return bean;
     }
 
-    @Bean(name = DataSourceConfiguration.OWNER_TRANSACTION_MANAGER)
+    @Bean(name = OWNER_TRANSACTION_MANAGER)
     public PlatformTransactionManager ownerTransactionManager(
             @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
