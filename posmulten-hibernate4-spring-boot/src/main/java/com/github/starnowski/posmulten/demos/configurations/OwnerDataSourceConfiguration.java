@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.demos.hibernate.configurations;
+package com.github.starnowski.posmulten.demos.configurations;
 
 import com.github.starnowski.posmulten.demos.hibernate.PostgresRLSlHibernateSchemaManagementTool;
 import org.hibernate.MultiTenancyStrategy;
@@ -73,7 +73,7 @@ public class OwnerDataSourceConfiguration {
         return bean;
     }
 
-    @Bean(name = OWNER_TRANSACTION_MANAGER)
+    @Bean(name = DataSourceConfiguration.OWNER_TRANSACTION_MANAGER)
     public PlatformTransactionManager ownerTransactionManager(
             @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();

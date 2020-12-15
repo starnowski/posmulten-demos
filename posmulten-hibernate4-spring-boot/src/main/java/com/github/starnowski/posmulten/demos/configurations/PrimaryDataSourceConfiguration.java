@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.demos.hibernate.configurations;
+package com.github.starnowski.posmulten.demos.configurations;
 
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.cfg.Environment;
