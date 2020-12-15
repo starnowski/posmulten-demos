@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.demos.web.configurations;
 
 import com.github.starnowski.posmulten.demos.web.filters.CorrectTenantContextFilter;
+import com.github.starnowski.posmulten.demos.web.filters.CurrentTenantResolverFilter;
 import com.github.starnowski.posmulten.demos.web.util.DomainResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -12,12 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.DispatcherType;
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    public static final String REALM = "posmulten_demo";
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -35,8 +39,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/app/*/login").permitAll()
                 .antMatchers("/app/**").authenticated()
                 .and()
-                .exceptionHandling()
-                .defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
+                .httpBasic().realmName(REALM).authenticationEntryPoint(basicAuthenticationEntryPoint())
+                .and()
+                .exceptionHandling();
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(correctTenantContextFilter(), SecurityContextPersistenceFilter.class);
     }
@@ -52,8 +57,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DomainLoginUrlAuthenticationEntryPoint domainLoginUrlAuthenticationEntryPoint() {
-        return new DomainLoginUrlAuthenticationEntryPoint("/app/" + DomainLoginUrlAuthenticationEntryPoint.DOMAIN_URL_PART + "/login");
+    public BasicAuthenticationEntryPoint basicAuthenticationEntryPoint() {
+        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+        entryPoint.setRealmName(REALM);
+        return entryPoint;
     }
 
     @Bean
