@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/tenants").permitAll()
-                .antMatchers("/app/*/login").permitAll()
+                .antMatchers("/app/*/users").permitAll()
                 .antMatchers("/app/**").authenticated()
                 .and()
                 .httpBasic().realmName(REALM).authenticationEntryPoint(basicAuthenticationEntryPoint())
