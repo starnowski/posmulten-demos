@@ -41,7 +41,7 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
             dto.setName(tenant)
 
         when:
-            def result = restTemplate.postForEntity("/app/tenants", dto, TenantDto.class)
+            def result = restTemplate.postForEntity("/tenants", dto, TenantDto.class)
 
         then:
             result.body.name == tenant
