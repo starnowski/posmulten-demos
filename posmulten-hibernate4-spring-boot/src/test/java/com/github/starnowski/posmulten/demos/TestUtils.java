@@ -17,17 +17,9 @@ public class TestUtils {
 
     public static int countNumberOfRecordsWhere(JdbcTemplate jdbcTemplate, String table, String condition)
     {
-        return countNumberOfRecordsWhereByTenantId(jdbcTemplate, table, condition);
-    }
-
-    public static int countNumberOfRecordsWhereByTenantId(JdbcTemplate jdbcTemplate, String table, String condition)
-    {
-        return jdbcTemplate.execute(new StatementCallback<Integer>() {
-            @Override
-            public Integer doInStatement(Statement statement) throws SQLException, DataAccessException {
-                ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + condition);rs.next();
-                return rs.getInt(1);
-            }
+        return jdbcTemplate.execute((StatementCallback<Integer>) statement -> {
+            ResultSet rs = statement.executeQuery("SELECT COUNT(*) FROM " + table + " WHERE " + condition);rs.next();
+            return rs.getInt(1);
         });
     }
 

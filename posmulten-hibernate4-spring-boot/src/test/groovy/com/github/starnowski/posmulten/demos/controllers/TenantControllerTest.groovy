@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.demos.SpecificationWithSpringBootWebEnvir
 import com.github.starnowski.posmulten.demos.TestUtils
 import com.github.starnowski.posmulten.demos.dto.TenantDto
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.context.jdbc.Sql
@@ -11,6 +12,7 @@ import org.springframework.test.context.jdbc.SqlConfig
 import org.springframework.test.context.jdbc.SqlGroup
 import spock.lang.Unroll
 
+import static com.github.starnowski.posmulten.demos.TestUtils.countNumberOfRecordsWhere
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD
@@ -29,12 +31,13 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
     TestRestTemplate restTemplate
 
     @Autowired
-    JdbcTemplate jdbcTemplate
+    @Qualifier("ownerJdbcTemplate")
+    protected JdbcTemplate ownerJdbcTemplate
 
     def slurper = new groovy.json.JsonSlurper()
 
     @Unroll
-    def "should create teannt with name #tenant based on request body"()
+    def "should create tenant with name #tenant based on request body"()
     {
         given:
             TenantDto dto = new TenantDto()
@@ -45,6 +48,9 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
 
         then:
             result.body.name == tenant
+
+        and: "number of added tenants should be correct"
+            countNumberOfRecordsWhere(ownerJdbcTemplate, "tenant_info", "name = '" + tenant + "'") == 1
 
         where:
             tenant << ["xdds", "ten1", "some_com_ten"]
