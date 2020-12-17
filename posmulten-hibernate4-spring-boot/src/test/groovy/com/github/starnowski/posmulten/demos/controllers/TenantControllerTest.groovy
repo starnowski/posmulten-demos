@@ -34,7 +34,7 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
     def slurper = new groovy.json.JsonSlurper()
 
     @Unroll
-    def "should modify company data base on request body"()
+    def "should create teannt with name #tenant based on request body"()
     {
         given:
             TenantDto dto = new TenantDto()
