@@ -3,18 +3,18 @@ package com.github.starnowski.posmulten.demos.hibernate;
 import com.github.starnowski.posmulten.demos.hibernate.exceptions.InvalidTenantContext;
 import com.github.starnowski.posmulten.demos.util.TenantContext;
 import org.hibernate.engine.spi.SessionImplementor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import static java.lang.String.format;
 
 @Component
 public class TenantContextAwareInvoker {
 
-    @Autowired
+    @PersistenceContext(unitName = "pu")
     private EntityManager entityManager;
 
     public <R,E extends Exception> R tryExecutedInCorrectTenantContext(SupplierWithGenericException<R,E> supplier, String tenant) throws E{
