@@ -34,8 +34,6 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
     @Qualifier("ownerJdbcTemplate")
     protected JdbcTemplate ownerJdbcTemplate
 
-    def slurper = new groovy.json.JsonSlurper()
-
     @Unroll
     def "should create tenant with name #tenant based on request body"()
     {
