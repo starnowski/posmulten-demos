@@ -8,5 +8,5 @@ import spock.lang.Specification
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class SpecificationWithSpringBootWebEnvironmentTestContext extends Specification{
+abstract class SpecificationWithSpringBootWebEnvironmentTestContext extends Specification{
 }
