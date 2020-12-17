@@ -44,7 +44,7 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
             def result = restTemplate.postForEntity("/app/tenants", dto, TenantDto.class)
 
         then:
-            result.name == tenant
+            result.body.name == tenant
 
         where:
             tenant << ["xdds", "ten1", "some_com_ten"]

@@ -23,4 +23,11 @@ public class TenantService {
         result.setName(tenant.getName());
         return result;
     }
+
+    @Transactional(readOnly = true)
+    public TenantDto findByName(String name)
+    {
+        Tenant tenant = tenantRepository.findOne(name);
+        return tenant == null ? null : new TenantDto().setName(tenant.getName());
+    }
 }

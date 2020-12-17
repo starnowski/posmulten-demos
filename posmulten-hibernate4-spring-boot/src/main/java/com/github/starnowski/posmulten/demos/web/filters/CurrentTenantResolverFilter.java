@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.demos.web.filters;
 
-import com.github.starnowski.posmulten.demos.dao.TenantRepository;
-import com.github.starnowski.posmulten.demos.model.Tenant;
+import com.github.starnowski.posmulten.demos.dto.TenantDto;
+import com.github.starnowski.posmulten.demos.services.TenantService;
 import com.github.starnowski.posmulten.demos.web.util.DomainResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import static com.github.starnowski.posmulten.demos.util.TenantContext.setInvali
 public class CurrentTenantResolverFilter implements Filter {
 
     @Autowired
-    private TenantRepository tenantRepository;
+    private TenantService tenantService;
     @Autowired
     private DomainResolver domainResolver;
 
@@ -31,7 +31,7 @@ public class CurrentTenantResolverFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String domain = domainResolver.resolve(httpServletRequest);
         if (domain != null) {
-            Tenant domainTenant = tenantRepository.getOne(domain);
+            TenantDto domainTenant = tenantService.findByName(domain);
             if (domainTenant != null) {
                 setCurrentTenant(domainTenant.getName());
             } else {
