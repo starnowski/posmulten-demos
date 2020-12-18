@@ -14,6 +14,7 @@ import spock.lang.Unroll
 
 import static com.github.starnowski.posmulten.demos.TestUtils.countNumberOfRecordsWhere
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER
+import static org.assertj.core.api.Assertions.assertThat
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED
@@ -40,6 +41,7 @@ class TenantControllerTest extends SpecificationWithSpringBootWebEnvironmentTest
         given:
             TenantDto dto = new TenantDto()
             dto.setName(tenant)
+            assertThat(countNumberOfRecordsWhere(ownerJdbcTemplate, "tenant_info", "name = '" + tenant + "'")).isZero()
 
         when:
             def result = restTemplate.postForEntity("/tenants", dto, TenantDto.class)
