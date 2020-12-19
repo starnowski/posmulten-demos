@@ -3,6 +3,7 @@ package com.github.starnowski.posmulten.demos;
 import com.github.starnowski.posmulten.demos.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.testng.annotations.BeforeMethod;
@@ -24,7 +25,10 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
 
     @Qualifier("ownerDataSource")
     @Autowired
-    public DataSource ownerDataSource;
+    private DataSource ownerDataSource;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     @DataProvider(name = "userData")
     protected static Object[][] userData()
@@ -53,7 +57,20 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
 
     }
 
-    @Test(dependsOnMethods = "prepareDatabase", alwaysRun = true)
+    @Test(dependsOnMethods = "prepareDatabase")
+    public void createUser(UserDto user, String tenant)
+    {
+        // given
+        String url = appTenantUrl(tenant, "users");
+
+        // when
+        restTemplate.postForEntity(url, user, UserDto.class);
+
+        // then
+        //TODO
+    }
+
+    @Test(dependsOnMethods = "createUser", alwaysRun = true)
     @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
