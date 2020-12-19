@@ -16,7 +16,6 @@ import static com.github.starnowski.posmulten.demos.TestUtils.*;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
@@ -50,9 +49,6 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, INSERT_TESTS_TENANTS_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
-    @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-            config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
-            executionPhase = AFTER_TEST_METHOD)
     public void prepareDatabase()
     {
 
