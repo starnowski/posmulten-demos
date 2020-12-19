@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import static com.github.starnowski.posmulten.demos.TestUtils.*;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -57,17 +58,18 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
 
     }
 
-    @Test(dependsOnMethods = "prepareDatabase")
+    @Test(dependsOnMethods = "prepareDatabase", dataProvider = "userData")
     public void createUser(UserDto user, String tenant)
     {
         // given
+        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenant)).isZero();
         String url = appTenantUrl(tenant, "users");
 
         // when
         restTemplate.postForEntity(url, user, UserDto.class);
 
         // then
-        //TODO
+        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenant)).isEqualTo(1);
     }
 
     @Test(dependsOnMethods = "createUser", alwaysRun = true)
@@ -77,5 +79,10 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     public void deleteData()
     {
 
+    }
+
+    private int countUsersWithSpecifiedName(String name, String tenant)
+    {
+        return countRowsInTableWhere("user_info", "username = '" + name + "' AND tenant_id = '" + tenant + "'");
     }
 }
