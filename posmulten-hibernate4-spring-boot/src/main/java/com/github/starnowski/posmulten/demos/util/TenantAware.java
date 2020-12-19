@@ -11,6 +11,6 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class TenantAware {
 
-    @Column(name = "tenant_id")
+    @Column(name = "tenant_id", insertable = false, updatable = false)
     private String tenantId;
 }
