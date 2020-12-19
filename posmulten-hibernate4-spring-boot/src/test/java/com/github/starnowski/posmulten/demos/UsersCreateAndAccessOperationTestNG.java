@@ -2,6 +2,8 @@ package com.github.starnowski.posmulten.demos;
 
 import com.github.starnowski.posmulten.demos.dto.PostDto;
 import com.github.starnowski.posmulten.demos.dto.UserDto;
+import lombok.Data;
+import lombok.experimental.Accessors;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -43,8 +45,8 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     protected static Object[][] userData()
     {
         return new Object[][]{
-                {new UserDto().setUsername("johndoe").setPassword(PASSWORD), "ten1"},
-                {new UserDto().setUsername("marydoe").setPassword(PASSWORD), "xds"}
+                {new UserDto().setUsername("johndoe").setPassword(PASSWORD), new TenantTestData().setTenant("ten1").setDifferentTenant("xds")},
+                {new UserDto().setUsername("marydoe").setPassword(PASSWORD), new TenantTestData().setTenant("xds").setDifferentTenant("ten1")}
         };
     }
 
@@ -64,25 +66,25 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     }
 
     @Test(dependsOnMethods = "prepareDatabase", dataProvider = "userData")
-    public void createUser(UserDto user, String tenant)
+    public void createUser(UserDto user, TenantTestData tenantTestData)
     {
         // given
-        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenant)).isZero();
-        String url = appTenantUrl(tenant, "users");
+        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenantTestData.getTenant())).isZero();
+        String url = appTenantUrl(tenantTestData.getTenant(), "users");
 
         // when
         ResponseEntity<UserDto> response = restTemplate.postForEntity(url, user, UserDto.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(CREATED);
-        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenant)).isEqualTo(1);
+        assertThat(countUsersWithSpecifiedName(user.getUsername(), tenantTestData.getTenant())).isEqualTo(1);
     }
 
     @Test(dependsOnMethods = "createUser", dataProvider = "userData")
-    public void gettingAuthenticationAlertPageWhenAddingPostsResources(UserDto user, String tenant)
+    public void gettingAuthenticationAlertPageWhenAddingPostsResources(UserDto user, TenantTestData tenantTestData)
     {
         // given
-        String url = appTenantUrl(tenant, "posts");
+        String url = appTenantUrl(tenantTestData.getTenant(), "posts");
         String expectedText = "Post from " + user.getUsername();
         PostDto post = new PostDto().setText(expectedText);
 
@@ -94,10 +96,10 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     }
 
     @Test(dependsOnMethods = "createUser", dataProvider = "userData")
-    public void loginWithBasicWhileAddingPostsResources(UserDto user, String tenant)
+    public void loginWithBasicWhileAddingPostsResources(UserDto user, TenantTestData tenantTestData)
     {
         // given
-        String url = appTenantUrl(tenant, "posts");
+        String url = appTenantUrl(tenantTestData.getTenant(), "posts");
         String expectedText = "Post from " + user.getUsername();
         PostDto post = new PostDto().setText(expectedText);
         HttpHeaders headers = prepareBasicAuthorizationHeader(user.getUsername(), user.getPassword());
@@ -114,10 +116,10 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     }
 
     @Test(dependsOnMethods = "loginWithBasicWhileAddingPostsResources", dataProvider = "userData")
-    public void loginWithBasicWhileReadingAllTenantPostsResources(UserDto user, String tenant)
+    public void loginWithBasicWhileReadingAllTenantPostsResources(UserDto user, TenantTestData tenantTestData)
     {
         // given
-        String url = appTenantUrl(tenant, "posts");
+        String url = appTenantUrl(tenantTestData.getTenant(), "posts");
         HttpHeaders headers = prepareBasicAuthorizationHeader(user.getUsername(), user.getPassword());
         RequestEntity<Void> request = RequestEntity.get(create(url)).header("Authorization", headers.getFirst("Authorization")).build();
         ParameterizedTypeReference<List<PostDto>> typeReference = new ParameterizedTypeReference<List<PostDto>>() {};
@@ -151,5 +153,13 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         String base64ClientCredentials = new String(Base64.encodeBase64(plainClientCredentials.getBytes()));
         httpHeaders.add("Authorization", "Basic " + base64ClientCredentials);
         return httpHeaders;
+    }
+
+    @Data
+    @Accessors(chain = true)
+    private static class TenantTestData
+    {
+        private String tenant;
+        private String differentTenant;
     }
 }
