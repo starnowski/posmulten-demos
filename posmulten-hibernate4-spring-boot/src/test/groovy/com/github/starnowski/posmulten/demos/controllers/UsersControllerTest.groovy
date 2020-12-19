@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.demos.controllers
 
 import com.github.starnowski.posmulten.demos.SpecificationWithSpringBootWebEnvironmentTestContext
-import com.github.starnowski.posmulten.demos.dto.TenantDto
 import com.github.starnowski.posmulten.demos.dto.UserDto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
@@ -43,7 +42,7 @@ class UsersControllerTest extends SpecificationWithSpringBootWebEnvironmentTestC
             def url = appTenantUrl(tenant, "users")
 
         when:
-            def result = restTemplate.postForEntity(url, user, TenantDto.class)
+            def result = restTemplate.postForEntity(url, user, UserDto.class)
 
         then:
             result.body.username == user.getUsername()
