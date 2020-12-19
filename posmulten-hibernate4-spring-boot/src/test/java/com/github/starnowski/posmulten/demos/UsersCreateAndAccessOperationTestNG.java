@@ -96,7 +96,7 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         assertThat(response.getBody().getAuthor().getUserId()).isEqualTo(user.getUserId());
     }
 
-    @Test(dependsOnMethods = "createUser", dataProvider = "userData")
+    @Test(dependsOnMethods = "loginWithBasicWhileAddingPostsResources", dataProvider = "userData")
     public void loginWithBasicWhileReadingAllTenantPostsResources(UserDto user, String tenant)
     {
         // given
@@ -110,7 +110,7 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         assertThat(response.getBody().getPosts()).isNotEmpty().hasSize(1);
     }
 
-    @Test(dependsOnMethods = {"createUser", "loginWithBasicWhileReadingAllTenantPostsResources"}, alwaysRun = true)
+    @Test(dependsOnMethods = {"createUser", "loginWithBasicWhileReadingAllTenantPostsResources", "loginWithBasicWhileReadingAllTenantPostsResources"}, alwaysRun = true)
     @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
