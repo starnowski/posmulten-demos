@@ -94,7 +94,7 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         ResponseEntity<PostDto> response = restTemplate.postForEntity(url, post, PostDto.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(NETWORK_AUTHENTICATION_REQUIRED);
+        assertThat(response.getStatusCode()).isEqualTo(UNAUTHORIZED);
     }
 
     @Test(dependsOnMethods = "createUser", dataProvider = "userData")
