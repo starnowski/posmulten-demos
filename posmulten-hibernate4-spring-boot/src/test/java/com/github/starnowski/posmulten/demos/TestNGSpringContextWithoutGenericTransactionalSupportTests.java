@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(classes = Application.class)
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-public class TestNGSpringContextWithoutGenericTransactionalSupportTests extends AbstractTransactionalTestNGSpringContextTests {
+public abstract class TestNGSpringContextWithoutGenericTransactionalSupportTests extends AbstractTransactionalTestNGSpringContextTests {
 }

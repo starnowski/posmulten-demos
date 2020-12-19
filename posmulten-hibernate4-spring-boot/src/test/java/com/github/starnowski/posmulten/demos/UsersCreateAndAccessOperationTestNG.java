@@ -1,0 +1,4 @@
+package com.github.starnowski.posmulten.demos;
+
+public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWithoutGenericTransactionalSupportTests{
+}
