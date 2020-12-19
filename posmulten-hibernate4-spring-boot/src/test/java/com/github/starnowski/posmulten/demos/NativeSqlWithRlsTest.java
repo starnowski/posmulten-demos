@@ -72,7 +72,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(ownerJdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        int result = tenantContextAwareInvoker.tryExecutedInCorrectTenantContext(() ->
+        int result = tenantContextAwareInvoker.tryExecuteTransactionInCorrectTenantContext(() ->
                 returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'"), "xds");
 
         // then
@@ -92,6 +92,25 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
 
         // when
         int result = returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds1"));
+
+        // then
+        assertThat(result).isZero();
+    }
+
+    @Test
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+            executionPhase = AFTER_TEST_METHOD)
+    public void shouldNotAbleToReadRecordFromOtherTenantWhenTenantIsStoredInThreadContext() {
+        // given
+        Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(ownerJdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
+
+        // when
+        int result = tenantContextAwareInvoker.tryExecuteTransactionInCorrectTenantContext(() ->
+                returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'"), "xds1");
 
         // then
         assertThat(result).isZero();
