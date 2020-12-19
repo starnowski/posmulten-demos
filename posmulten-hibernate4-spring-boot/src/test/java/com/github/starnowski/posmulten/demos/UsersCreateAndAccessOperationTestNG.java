@@ -6,9 +6,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -23,6 +26,7 @@ import java.util.List;
 import static com.github.starnowski.posmulten.demos.TestUtils.*;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
+import static java.net.URI.create;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
@@ -100,9 +104,11 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         String url = appTenantUrl(tenant, "posts");
         String expectedText = "Post from " + user.getUsername();
         PostDto post = new PostDto().setText(expectedText);
+        HttpHeaders headers = prepareBasicAuthorizationHeader(user.getUsername(), user.getPassword());
+        RequestEntity<PostDto> requestEntity = RequestEntity.post(create(url)).header("Authorization", headers.getFirst("Authorization")).body(post, PostDto.class);
 
         // when
-        ResponseEntity<PostDto> response = restTemplate.postForEntity(url, post, PostDto.class);
+        ResponseEntity<PostDto> response = restTemplate.exchange(requestEntity, PostDto.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(CREATED);
@@ -116,9 +122,11 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     {
         // given
         String url = appTenantUrl(tenant, "posts");
+        HttpHeaders headers = prepareBasicAuthorizationHeader(user.getUsername(), user.getPassword());
+        RequestEntity<Void> request = RequestEntity.get(create(url)).header("Authorization", headers.getFirst("Authorization")).build();
 
         // when
-        ResponseEntity<PostsList> response = restTemplate.getForEntity(url, PostsList.class);
+        ResponseEntity<PostsList> response = restTemplate.exchange(request, PostsList.class);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(OK);
@@ -146,5 +154,14 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     private static class PostsList
     {
         private List<PostDto> posts = new ArrayList<>();
+    }
+
+    private HttpHeaders prepareBasicAuthorizationHeader(String username, String password)
+    {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        String plainClientCredentials= username + ":" + password;
+        String base64ClientCredentials = new String(Base64.encodeBase64(plainClientCredentials.getBytes()));
+        httpHeaders.add("Authorization", "Basic " + base64ClientCredentials);
+        return httpHeaders;
     }
 }
