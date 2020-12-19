@@ -2,10 +2,6 @@ package com.github.starnowski.posmulten.demos;
 
 import com.github.starnowski.posmulten.demos.dto.PostDto;
 import com.github.starnowski.posmulten.demos.dto.UserDto;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +17,6 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.github.starnowski.posmulten.demos.TestUtils.*;
@@ -147,15 +142,6 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     private int countUsersWithSpecifiedName(String name, String tenant)
     {
         return countRowsInTableWhere("user_info", "username = '" + name + "' AND tenant_id = '" + tenant + "'");
-    }
-
-    @Data
-    @Accessors(chain = true)
-    @EqualsAndHashCode(of = "id")
-    @ToString
-    private static class PostsList
-    {
-        private List<PostDto> posts = new ArrayList<>();
     }
 
     private HttpHeaders prepareBasicAuthorizationHeader(String username, String password)
