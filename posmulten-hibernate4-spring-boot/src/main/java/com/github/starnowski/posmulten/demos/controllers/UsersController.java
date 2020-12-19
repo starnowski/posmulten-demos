@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @ControllerAdvice
-@RequestMapping("/app/users")
+@RequestMapping("/app/{domain}/users")
 public class UsersController {
 
     @Autowired
