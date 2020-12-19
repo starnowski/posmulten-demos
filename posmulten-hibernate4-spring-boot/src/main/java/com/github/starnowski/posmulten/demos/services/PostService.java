@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class PostService {
@@ -33,6 +36,16 @@ public class PostService {
     private PostDto get(Long postId)
     {
         Post post = postRepository.getOne(postId);
+        return map(post);
+    }
+
+    private PostDto map(Post post) {
         return new PostDto().setId(post.getId()).setText(post.getText()).setAuthor(userService.read(post.getAuthor().getUserId()));
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostDto> list()
+    {
+        return postRepository.findAll().stream().map(post -> map(post)).collect(toList());
     }
 }

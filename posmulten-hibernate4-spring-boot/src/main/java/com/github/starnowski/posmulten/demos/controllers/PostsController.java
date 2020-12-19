@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @ControllerAdvice
 @RequestMapping("/app/{domain}/posts")
@@ -22,5 +24,11 @@ public class PostsController {
     @PostMapping
     public ResponseEntity<UserDto> createTenant(@RequestBody PostDto body) {
         return new ResponseEntity(postService.create(body, securityService.findLoggedInTenantUser().getUserId()), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public List<PostDto> list()
+    {
+        return postService.list();
     }
 }

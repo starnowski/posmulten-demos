@@ -10,6 +10,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -124,13 +125,14 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         String url = appTenantUrl(tenant, "posts");
         HttpHeaders headers = prepareBasicAuthorizationHeader(user.getUsername(), user.getPassword());
         RequestEntity<Void> request = RequestEntity.get(create(url)).header("Authorization", headers.getFirst("Authorization")).build();
+        ParameterizedTypeReference<List<PostDto>> typeReference = new ParameterizedTypeReference<List<PostDto>>() {};
 
         // when
-        ResponseEntity<PostsList> response = restTemplate.exchange(request, PostsList.class);
+        ResponseEntity<List<PostDto>> response = restTemplate.exchange(request, typeReference);
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(OK);
-        assertThat(response.getBody().getPosts()).isNotEmpty().hasSize(1);
+        assertThat(response.getBody()).isNotEmpty().hasSize(1);
     }
 
     @Test(dependsOnMethods = {"createUser", "loginWithBasicWhileReadingAllTenantPostsResources", "loginWithBasicWhileReadingAllTenantPostsResources"}, alwaysRun = true)
