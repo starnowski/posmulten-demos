@@ -112,9 +112,9 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
 
         // then
         assertThat(response.getStatusCode()).isEqualTo(CREATED);
-        assertThat(response.getBody().getText()).isEqualTo(post);
+        assertThat(response.getBody().getText()).isEqualTo(post.getText());
         assertThat(response.getBody().getAuthor()).isNotNull();
-        assertThat(response.getBody().getAuthor().getUserId()).isEqualTo(user.getUserId());
+        assertThat(response.getBody().getAuthor().getUserId()).isNotNull();
     }
 
     @Test(dependsOnMethods = "loginWithBasicWhileAddingPostsResources", dataProvider = "userData")

@@ -1,9 +1,9 @@
 package com.github.starnowski.posmulten.demos.web.filters;
 
-import com.github.starnowski.posmulten.demos.dao.TenantRepository;
-import com.github.starnowski.posmulten.demos.model.Tenant;
+import com.github.starnowski.posmulten.demos.dto.TenantDto;
 import com.github.starnowski.posmulten.demos.security.SecurityServiceImpl;
 import com.github.starnowski.posmulten.demos.security.TenantUser;
+import com.github.starnowski.posmulten.demos.services.TenantService;
 import com.github.starnowski.posmulten.demos.web.util.DomainResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.io.IOException;
 public class CorrectTenantContextFilter implements Filter {
 
     @Autowired
-    private TenantRepository tenantRepository;
+    private TenantService tenantService;
     @Autowired
     private SecurityServiceImpl securityService;
     @Autowired
@@ -41,7 +41,7 @@ public class CorrectTenantContextFilter implements Filter {
             String domain = domainResolver.resolve(httpServletRequest);
             log.trace("domain = " + domain);
             if (domain != null) {
-                Tenant domainTenant = tenantRepository.getOne(domain);
+                TenantDto domainTenant = tenantService.findByName(domain);
                 if (domainTenant != null && !domainTenant.getName().equals(user.getTenantId())) {
                     HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
                     httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
