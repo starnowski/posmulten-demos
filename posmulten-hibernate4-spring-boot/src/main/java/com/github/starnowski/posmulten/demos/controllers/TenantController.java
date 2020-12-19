@@ -46,7 +46,7 @@ public class TenantController {
          * executed in that same thread.
          */
         Future<TenantDto> future = threadPoolTaskExecutor.submit(() -> tenantContextAwareInvoker.tryExecutedInCorrectTenantContext(() -> tenantService.create(body), body.getName()));
-        responseEntity = new ResponseEntity(future.get(), HttpStatus.ACCEPTED);
+        responseEntity = new ResponseEntity(future.get(), HttpStatus.CREATED);
         return responseEntity;
     }
 }
