@@ -47,4 +47,9 @@ public class TestUtils {
     public static String statementSettingCurrentTenantVariable(ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory, String tenantId) {
         return setCurrentTenantIdFunctionInvocationFactory.generateStatementThatSetTenant(tenantId);
     }
+
+    public static String appTenantUrl(String tenant, String urlPart)
+    {
+        return "/app/" + tenant + "/" + urlPart;
+    }
 }
