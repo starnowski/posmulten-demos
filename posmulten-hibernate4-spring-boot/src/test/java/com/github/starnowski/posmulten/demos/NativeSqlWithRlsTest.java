@@ -1,5 +1,6 @@
 package com.github.starnowski.posmulten.demos;
 
+import com.github.starnowski.posmulten.demos.hibernate.TenantContextAwareInvoker;
 import com.github.starnowski.posmulten.postgresql.core.context.ISharedSchemaContext;
 import com.github.starnowski.posmulten.postgresql.core.rls.function.ISetCurrentTenantIdFunctionInvocationFactory;
 import org.assertj.core.api.Assertions;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 
+import static com.github.starnowski.posmulten.demos.TestUtils.returnIntForStatement;
 import static com.github.starnowski.posmulten.demos.TestUtils.statementSettingCurrentTenantVariable;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +30,15 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     protected JdbcTemplate ownerJdbcTemplate;
 
     @Autowired
+    private TenantContextAwareInvoker tenantContextAwareInvoker;
+
+    @Autowired
     protected ISharedSchemaContext iSharedSchemaContext;
 
     protected ISetCurrentTenantIdFunctionInvocationFactory setCurrentTenantIdFunctionInvocationFactory;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         setCurrentTenantIdFunctionInvocationFactory = iSharedSchemaContext.getISetCurrentTenantIdFunctionInvocationFactory();
     }
 
@@ -50,7 +54,26 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(ownerJdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        int result = TestUtils.returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds"));
+        int result = returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds"));
+
+        // then
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    @Sql(value = {TestUtils.GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TestUtils.CLEAR_DATABASE_SCRIPT_PATH, TestUtils.TEST_BASIC_DATA_SCRIPT_PATH},
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+            executionPhase = BEFORE_TEST_METHOD)
+    @Sql(value = TestUtils.CLEAR_DATABASE_SCRIPT_PATH,
+            config = @SqlConfig(transactionMode = ISOLATED, dataSource = "ownerDataSource", transactionManager = OWNER_TRANSACTION_MANAGER),
+            executionPhase = AFTER_TEST_METHOD)
+    public void shouldReadRecordFromSameTenantWhenTenantIsStoredInThreadContext() {
+        // given
+        Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(ownerJdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
+
+        // when
+        int result = tenantContextAwareInvoker.tryExecutedInCorrectTenantContext(() ->
+                returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'"), "xds");
 
         // then
         assertThat(result).isEqualTo(1);
@@ -68,7 +91,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
         Assertions.assertThat(TestUtils.countNumberOfRecordsWhere(ownerJdbcTemplate, "user_info", "user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' AND tenant_id = 'xds'")).isEqualTo(1);
 
         // when
-        int result = TestUtils.returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds1"));
+        int result = returnIntForStatement(jdbcTemplate, "SELECT COUNT(*) FROM user_info WHERE user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'", statementSettingCurrentTenantVariable(setCurrentTenantIdFunctionInvocationFactory, "xds1"));
 
         // then
         assertThat(result).isZero();
