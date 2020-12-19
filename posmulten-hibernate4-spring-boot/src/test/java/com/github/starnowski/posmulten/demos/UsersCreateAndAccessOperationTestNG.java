@@ -103,7 +103,11 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         String url = appTenantUrl(tenant, "posts");
 
         // when
+        ResponseEntity<PostsList> response = restTemplate.getForEntity(url, PostsList.class);
 
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getPosts()).isNotEmpty().hasSize(1);
     }
 
     @Test(dependsOnMethods = {"createUser", "loginWithBasicWhileReadingAllTenantPostsResources"}, alwaysRun = true)
