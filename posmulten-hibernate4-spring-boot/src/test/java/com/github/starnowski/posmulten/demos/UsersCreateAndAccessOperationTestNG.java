@@ -9,7 +9,6 @@ import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
@@ -25,6 +24,7 @@ import static com.github.starnowski.posmulten.demos.TestUtils.*;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.*;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
@@ -74,8 +74,23 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         ResponseEntity<UserDto> response = restTemplate.postForEntity(url, user, UserDto.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(CREATED);
         assertThat(countUsersWithSpecifiedName(user.getUsername(), tenant)).isEqualTo(1);
+    }
+
+    @Test(dependsOnMethods = "createUser", dataProvider = "userData")
+    public void gettingAuthenticationAlertPageWhenAddingPostsResources(UserDto user, String tenant)
+    {
+        // given
+        String url = appTenantUrl(tenant, "posts");
+        String expectedText = "Post from " + user.getUsername();
+        PostDto post = new PostDto().setText(expectedText);
+
+        // when
+        ResponseEntity<PostDto> response = restTemplate.postForEntity(url, post, PostDto.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(NETWORK_AUTHENTICATION_REQUIRED);
     }
 
     @Test(dependsOnMethods = "createUser", dataProvider = "userData")
@@ -90,7 +105,7 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         ResponseEntity<PostDto> response = restTemplate.postForEntity(url, post, PostDto.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getStatusCode()).isEqualTo(CREATED);
         assertThat(response.getBody().getText()).isEqualTo(post);
         assertThat(response.getBody().getAuthor()).isNotNull();
         assertThat(response.getBody().getAuthor().getUserId()).isEqualTo(user.getUserId());
@@ -106,7 +121,7 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
         ResponseEntity<PostsList> response = restTemplate.getForEntity(url, PostsList.class);
 
         // then
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getStatusCode()).isEqualTo(OK);
         assertThat(response.getBody().getPosts()).isNotEmpty().hasSize(1);
     }
 
