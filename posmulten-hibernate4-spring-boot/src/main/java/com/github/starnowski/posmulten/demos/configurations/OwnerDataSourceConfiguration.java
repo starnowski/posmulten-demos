@@ -30,6 +30,7 @@ import static org.hibernate.cfg.AvailableSettings.SCHEMA_MANAGEMENT_TOOL;
 public class OwnerDataSourceConfiguration {
 
     public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
+    public static final String OWNER_DATA_SOURCE = "ownerDataSource";
 
     @Bean
     @ConfigurationProperties("spring.datasource.owner")
