@@ -1,6 +1,11 @@
 package com.github.starnowski.posmulten.demos;
 
+import com.github.starnowski.posmulten.demos.dto.PostDto;
 import com.github.starnowski.posmulten.demos.dto.UserDto;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -13,6 +18,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.github.starnowski.posmulten.demos.TestUtils.*;
 import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
@@ -76,9 +83,17 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     {
         // given
         String url = appTenantUrl(tenant, "posts");
+        String expectedText = "Post from " + user.getUsername();
+        PostDto post = new PostDto().setText(expectedText);
 
         // when
-        //TODO
+        ResponseEntity<PostDto> response = restTemplate.postForEntity(url, post, PostDto.class);
+
+        // then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody().getText()).isEqualTo(post);
+        assertThat(response.getBody().getAuthor()).isNotNull();
+        assertThat(response.getBody().getAuthor().getUserId()).isEqualTo(user.getUserId());
     }
 
     @Test(dependsOnMethods = "createUser", dataProvider = "userData")
@@ -103,5 +118,14 @@ public class UsersCreateAndAccessOperationTestNG extends TestNGSpringContextWith
     private int countUsersWithSpecifiedName(String name, String tenant)
     {
         return countRowsInTableWhere("user_info", "username = '" + name + "' AND tenant_id = '" + tenant + "'");
+    }
+
+    @Data
+    @Accessors(chain = true)
+    @EqualsAndHashCode(of = "id")
+    @ToString
+    private static class PostsList
+    {
+        private List<PostDto> posts = new ArrayList<>();
     }
 }
