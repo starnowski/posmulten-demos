@@ -30,6 +30,10 @@ To run application after build, please execute below line:
 spring-boot:run
 ```
 
+## Send REST API requests
+
+Project contains Postman collection with requests examples in file __posmulten-hibernate4-spring-boot.postman_collection.json__
+
 ## Java packages 
 
 * __com.github.starnowski.posmulten.demos.hibernate__ - Integration with Hibernate library
