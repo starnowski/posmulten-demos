@@ -27,7 +27,7 @@ mvn clean install
 To run application after build, please execute below line:
 
 ```bash
-spring-boot:run
+mvn spring-boot:run
 ```
 
 ## Send REST API requests
@@ -40,3 +40,7 @@ Project contains Postman collection with requests examples in file __posmulten-h
 * __com.github.starnowski.posmulten.demos.web__ - Integration with Spring Security and Spring Web configuration
 * __com.github.starnowski.posmulten.demos.configurations.PrimaryDataSourceConfiguration__ - Configuration for data source component that is used during schema creation via Hibernate
 * __com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration__ - Configuration for data source component that primary data source for application
+
+## Useful links
+
+* http://websystique.com/spring-security/secure-spring-rest-api-using-basic-authentication/
