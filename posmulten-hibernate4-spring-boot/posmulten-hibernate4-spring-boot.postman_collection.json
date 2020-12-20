@@ -64,6 +64,87 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create user's post",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{user_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{user_name}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\"  :   \"{{post_text}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/{{tenant_name}}/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"{{tenant_name}}",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all posts",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{user_password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{user_name}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/app/{{tenant_name}}/posts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"{{tenant_name}}",
+						"posts"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -98,6 +179,10 @@
 		{
 			"key": "user_password",
 			"value": " "
+		},
+		{
+			"key": "post_text",
+			"value": " Lorem Ipsum"
 		}
 	]
 }
