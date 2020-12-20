@@ -20,7 +20,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED
 
 @SqlGroup([
-        @Sql(value = [ GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, INSERT_TESTS_TENANTS_SCRIPT_PATH],
+        @Sql(value = [ CLEAR_DATABASE_SCRIPT_PATH, INSERT_TESTS_TENANTS_SCRIPT_PATH],
                 config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
                 executionPhase = BEFORE_TEST_METHOD),
         @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,

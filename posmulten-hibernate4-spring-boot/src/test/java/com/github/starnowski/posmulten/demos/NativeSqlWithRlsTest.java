@@ -42,7 +42,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -60,7 +60,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -79,7 +79,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -97,7 +97,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -116,7 +116,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -135,7 +135,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -154,7 +154,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
@@ -172,7 +172,7 @@ public class NativeSqlWithRlsTest extends AbstractWebEnvironmentSpringBootTestWi
     }
 
     @Test
-    @Sql(value = {GRANT_ACCESS_TO_DB_USER_SCRIPT_PATH, CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
+    @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, TEST_BASIC_DATA_SCRIPT_PATH},
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
             executionPhase = BEFORE_TEST_METHOD)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
