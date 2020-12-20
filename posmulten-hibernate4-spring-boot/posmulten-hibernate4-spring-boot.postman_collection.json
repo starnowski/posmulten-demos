@@ -34,6 +34,36 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Create new user",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\"  :   \"{{user_name}}\",\r\n    \"password\"  :   \"{{user_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/app/{{tenant_name}}/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"app",
+						"{{tenant_name}}",
+						"users"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -60,6 +90,14 @@
 		{
 			"key": "tenant_name",
 			"value": "tenant_name"
+		},
+		{
+			"key": "user_name",
+			"value": "username"
+		},
+		{
+			"key": "user_password",
+			"value": " "
 		}
 	]
 }
