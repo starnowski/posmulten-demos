@@ -2,6 +2,9 @@
 Demo applications for the [posmulten](https://github.com/starnowski/posmulten) library.
 It contains integration with Hibernate 4 and Spring Boot (version 1.X).
 Demo project during tests and application startup creates schema so that [shared schema strategy]((https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html/ch16.html)) could be used.
+Application has only a REST API that allows adding three types of resources (Tenant, User, and User's post).
+For security purposes, it uses simply basic authentication.
+
 
 ## Java packages 
 
