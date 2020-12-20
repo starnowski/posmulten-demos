@@ -1,7 +1,6 @@
 package com.github.starnowski.posmulten.demos.controllers;
 
 import com.github.starnowski.posmulten.demos.dto.PostDto;
-import com.github.starnowski.posmulten.demos.dto.UserDto;
 import com.github.starnowski.posmulten.demos.security.SecurityServiceImpl;
 import com.github.starnowski.posmulten.demos.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class PostsController {
     private SecurityServiceImpl securityService;
 
     @PostMapping
-    public ResponseEntity<UserDto> createTenant(@RequestBody PostDto body) {
+    public ResponseEntity<PostDto> createTenant(@RequestBody PostDto body) {
         return new ResponseEntity(postService.create(body, securityService.findLoggedInTenantUser().getUserId()), HttpStatus.CREATED);
     }
 
