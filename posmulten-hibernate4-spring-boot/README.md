@@ -13,6 +13,23 @@ Project contains database script that creates database:
 * __create-database-user.sql__ - creates database user with name 'posmhib4sb-user'
 * __create-database.sql__ - creates database and assigns the posmhib4sb-owner user as database owner
 
+## Project build
+
+After database creation project has to be build.
+Project uses maven for a build purpose.
+
+```bash
+mvn clean install
+```
+
+## Run application
+
+To run application after build, please execute below line:
+
+```bash
+spring-boot:run
+```
+
 ## Java packages 
 
 * __com.github.starnowski.posmulten.demos.hibernate__ - Integration with Hibernate library
