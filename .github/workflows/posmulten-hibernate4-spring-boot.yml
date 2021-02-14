@@ -32,7 +32,7 @@ jobs:
     - uses: harmon758/postgresql-action@v1
       with:
         postgresql version: '9.6'
-    steps:
+
     - name: Git checkout
       uses: actions/checkout@v2
 
