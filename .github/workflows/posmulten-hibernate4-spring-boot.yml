@@ -35,10 +35,5 @@ jobs:
       with:
         java-version: 1.8
 
-#    - name: Start MongoDB
-#      uses: supercharge/mongodb-github-action@1.3.0
-#      with:
-#        mongodb-version: ${{ matrix.mongodb-version }}
-
     - name: Build with Maven
-      run: cd posmulten-hibernate4-spring-boot && mvn clean install
+      run: cd posmulten-hibernate4-spring-boot && mvn -DskipTests clean install && mvn test && mvn -P !integration-tests,e2e-tests test
