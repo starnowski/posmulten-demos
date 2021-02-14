@@ -39,7 +39,7 @@ jobs:
     - name: Prepare database
       working-directory: "posmulten-hibernate4-spring-boot/scripts"
       run:  |
-        psql -f './create-database.sql' -U postgres
+        psql -f 'posmulten-hibernate4-spring-boot/scripts/create-database.sql' -U postgres
 #        psql -f 'create-database-owner.sql' -U postgres
 #        psql -f 'create-database-user.sql' -U postgres
 
