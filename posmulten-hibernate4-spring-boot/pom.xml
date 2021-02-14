@@ -22,7 +22,7 @@
         <thymeleaf.version>3.0.8.RELEASE</thymeleaf.version>
         <thymeleaf-layout-dialect.version>2.2.2</thymeleaf-layout-dialect.version>
         <spock.spring.version>1.1-groovy-2.4</spock.spring.version>
-        <com.github.starnowski.posmulten.version>0.2.0</com.github.starnowski.posmulten.version>
+        <com.github.starnowski.posmulten.version>0.4.0</com.github.starnowski.posmulten.version>
     </properties>
 
     <dependencies>
