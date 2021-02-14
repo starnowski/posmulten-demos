@@ -49,9 +49,9 @@ jobs:
     - name: Prepare database
       working-directory: "posmulten-hibernate4-spring-boot/scripts"
       run:  |
-        psql -d postgres --host="localhost" -p 5432 -f 'create-database.sql' -U postgres
         psql -d postgres --host="localhost" -p 5432 -f 'create-database-owner.sql' -U postgres
         psql -d postgres --host="localhost" -p 5432 -f 'create-database-user.sql' -U postgres
+        psql -d postgres --host="localhost" -p 5432 -f 'create-database.sql' -U postgres
       env:
         POSTGRES_HOST: localhost
         POSTGRES_PORT: 5432
