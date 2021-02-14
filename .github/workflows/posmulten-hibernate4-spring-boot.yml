@@ -29,9 +29,14 @@ jobs:
 #          --health-retries 5
     #https://awesomeopensource.com/project/Harmon758/postgresql-action
     steps:
-    - uses: harmon758/postgresql-action@v1
-      with:
-        postgresql version: '9.6'
+#    - uses: harmon758/postgresql-action@v1
+#      with:
+#        postgresql version: '9.6'
+
+    - name: Set up PostgreSQL
+      run: |
+        sudo apt-get install postgresql-9.6 libpq-dev
+        sudo service postgresql start
 
     - name: Git checkout
       uses: actions/checkout@v2
