@@ -1,0 +1,61 @@
+name: Run tests for posmulten-hibernate4-spring-boot
+
+on:
+  push:
+    paths:
+    - 'posmulten-hibernate4-spring-boot/**'
+    - '.github/workflows/posmulten-hibernate4-spring-boot.yml'
+
+## The action created based on the description from https://docs.github.com/en/actions/guides/creating-postgresql-service-containers
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+    services:
+      postgres:
+        image: postgres:9.6
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    #https://awesomeopensource.com/project/Harmon758/postgresql-action
+    steps:
+#    - uses: harmon758/postgresql-action@v1
+#      with:
+#        postgresql version: '9.6'
+
+#    - name: Set up PostgreSQL
+#      run: |
+#        sudo apt-get install postgresql-9.6 libpq-dev
+#        sudo service postgresql start
+
+    - name: Git checkout
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Prepare database
+      working-directory: "posmulten-hibernate4-spring-boot/scripts"
+      run:  |
+        psql -d postgres --host="localhost" -p 5432 -f 'create-database-owner.sql' -U postgres
+        psql -d postgres --host="localhost" -p 5432 -f 'create-database-user.sql' -U postgres
+        psql -d postgres --host="localhost" -p 5432 -f 'create-database.sql' -U postgres
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 5432
+        PGPASSWORD: "postgres"
+
+    - name: Build with Maven
+      run: cd posmulten-hibernate4-spring-boot && mvn -DskipTests clean install && mvn test && mvn -P !integration-tests,e2e-tests test
