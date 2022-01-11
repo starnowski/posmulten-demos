@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "9697ba4a-0b14-4460-bdd6-95d3d712a2e0",
-		"name": "posmulten-hibernate4-spring-boot",
-		"description": "Tests collection for demo application https://github.com/starnowski/posmulten-demos/tree/main/posmulten-hibernate4-spring-boot",
+		"name": "posmulten-hibernate5-spring-boot",
+		"description": "Tests collection for demo application https://github.com/starnowski/posmulten-demos/tree/main/posmulten-hibernate5-spring-boot",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [

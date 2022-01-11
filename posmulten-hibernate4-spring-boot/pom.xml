@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.starnowski.posmulten.demos</groupId>
-    <artifactId>posmulten-hibernate4-spring-boot</artifactId>
+    <artifactId>posmulten-hibernate5-spring-boot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
