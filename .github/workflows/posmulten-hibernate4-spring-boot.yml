@@ -1,10 +1,10 @@
-name: Run tests for posmulten-hibernate4-spring-boot
+name: Run tests for posmulten-hibernate5-spring-boot
 
 on:
   push:
     paths:
-    - 'posmulten-hibernate4-spring-boot/**'
-    - '.github/workflows/posmulten-hibernate4-spring-boot.yml'
+    - 'posmulten-hibernate5-spring-boot/**'
+    - '.github/workflows/posmulten-hibernate5-spring-boot.yml'
 
 ## The action created based on the description from https://docs.github.com/en/actions/guides/creating-postgresql-service-containers
 
@@ -47,7 +47,7 @@ jobs:
         java-version: 1.8
 
     - name: Prepare database
-      working-directory: "posmulten-hibernate4-spring-boot/scripts"
+      working-directory: "posmulten-hibernate5-spring-boot/scripts"
       run:  |
         psql -d postgres --host="localhost" -p 5432 -f 'create-database-owner.sql' -U postgres
         psql -d postgres --host="localhost" -p 5432 -f 'create-database-user.sql' -U postgres
@@ -58,4 +58,4 @@ jobs:
         PGPASSWORD: "postgres"
 
     - name: Build with Maven
-      run: cd posmulten-hibernate4-spring-boot && mvn -DskipTests clean install && mvn test && mvn -P !integration-tests,e2e-tests test
+      run: cd posmulten-hibernate5-spring-boot && mvn -DskipTests clean install && mvn test && mvn -P !integration-tests,e2e-tests test
