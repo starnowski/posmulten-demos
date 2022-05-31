@@ -18,6 +18,8 @@ misc.xml
 modules.xml
 *.iml
 
+**/.idea
+
 # idea subdirectories
 **/.idea/*
 
