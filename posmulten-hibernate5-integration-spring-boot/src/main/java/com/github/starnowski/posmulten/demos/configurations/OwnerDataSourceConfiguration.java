@@ -1,29 +1,24 @@
 package com.github.starnowski.posmulten.demos.configurations;
 
-import com.github.starnowski.posmulten.demos.hibernate.PostgresRLSlHibernateSchemaManagementTool;
+import com.github.starnowski.posmulten.hibernate.core.schema.PosmultenSchemaManagementTool;
 import org.hibernate.MultiTenancyStrategy;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
-import static org.hibernate.cfg.AvailableSettings.SCHEMA_MANAGEMENT_TOOL;
+import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
@@ -50,36 +45,76 @@ public class OwnerDataSourceConfiguration {
     }
 
 
-    @Bean(name = "schema_emf")
-    public LocalContainerEntityManagerFactoryBean emfSchemaBean(
-            EntityManagerFactoryBuilder entityManagerFactoryBuilder,
-            @Qualifier("ownerDataSource") DataSource ownerDataSource,
-            JpaProperties jpaProperties,
-            @Autowired PostgresRLSlHibernateSchemaManagementTool postgresRLSlHibernateSchemaManagementTool) {
-        Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
-        properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.NONE);
-        properties.put(SCHEMA_MANAGEMENT_TOOL, postgresRLSlHibernateSchemaManagementTool);
+//    @Bean(name = "schema_emf")
+//    public LocalContainerEntityManagerFactoryBean emfSchemaBean(
+//            EntityManagerFactoryBuilder entityManagerFactoryBuilder,
+//            @Qualifier("ownerDataSource") DataSource ownerDataSource,
+//            JpaProperties jpaProperties,
+//            @Autowired PostgresRLSlHibernateSchemaManagementTool postgresRLSlHibernateSchemaManagementTool) {
+//        Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
+//        properties.put("hibernate.hbm2ddl.auto", "create");
+//        properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.NONE);
+//        properties.put(SCHEMA_MANAGEMENT_TOOL, postgresRLSlHibernateSchemaManagementTool);
+//
+//        LocalContainerEntityManagerFactoryBean bean = entityManagerFactoryBuilder
+//                .dataSource(ownerDataSource)
+//                .jta(false)
+//                .persistenceUnit("spu")
+//                .properties(properties)
+//                .packages("com.github.starnowski.posmulten.demos.model")
+//                .build();
+//        bean.setPackagesToScan("com.github.starnowski.posmulten.demos.model");
+//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        vendorAdapter.setGenerateDdl(true);
+//        bean.setJpaVendorAdapter(vendorAdapter);
+//        return bean;
+//    }
 
-        LocalContainerEntityManagerFactoryBean bean = entityManagerFactoryBuilder
-                .dataSource(ownerDataSource)
-                .jta(false)
-                .persistenceUnit("spu")
-                .properties(properties)
-                .packages("com.github.starnowski.posmulten.demos.model")
-                .build();
-        bean.setPackagesToScan("com.github.starnowski.posmulten.demos.model");
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        bean.setJpaVendorAdapter(vendorAdapter);
-        return bean;
+    @Bean(name = "schema_session_factory")
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(ownerDataSource());
+        sessionFactory.setPackagesToScan(
+                "com.github.starnowski.posmulten.demos.model");
+        sessionFactory.setHibernateProperties(hibernateProperties());
+
+        return sessionFactory;
     }
 
+    private final Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(
+                "hibernate.hbm2ddl.auto", "create");
+        hibernateProperties.setProperty(
+                "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        hibernateProperties.setProperty(
+                Environment.MULTI_TENANT, MultiTenancyStrategy.NONE.name());
+        hibernateProperties.setProperty(
+                "hibernate.archive.autodetection", "class");
+        hibernateProperties.setProperty(
+                "hibernate.schema_management_tool", PosmultenSchemaManagementTool.class.getName());
+        hibernateProperties.setProperty(
+                "hibernate.format_sql", TRUE.toString());
+        hibernateProperties.setProperty(
+                "hibernate.show_sql", TRUE.toString());
+        hibernateProperties.setProperty(
+                "hibernate.posmulten.grantee", "posmhib4sb-user");
+        return hibernateProperties;
+    }
+
+//    @Bean(name = OWNER_TRANSACTION_MANAGER)
+//    public PlatformTransactionManager ownerTransactionManager(
+//            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
+//        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
+//        jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
+//        return jpaTransactionManager;
+//    }
+
     @Bean(name = OWNER_TRANSACTION_MANAGER)
-    public PlatformTransactionManager ownerTransactionManager(
-            @Qualifier("schema_emf") EntityManagerFactory emfSchemaBean) {
-        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-        jpaTransactionManager.setEntityManagerFactory(emfSchemaBean);
-        return jpaTransactionManager;
+    public PlatformTransactionManager hibernateTransactionManager(@Qualifier("schema_session_factory") SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager
+                = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
     }
 }
