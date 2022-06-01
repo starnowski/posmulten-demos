@@ -1,8 +1,15 @@
 package com.github.starnowski.posmulten.demos.configurations;
 
+import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator;
+import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderProviderInitiator;
+import com.github.starnowski.posmulten.hibernate.core.context.metadata.PosmultenUtilContextInitiator;
 import com.github.starnowski.posmulten.hibernate.core.schema.PosmultenSchemaManagementTool;
+import com.github.starnowski.posmulten.hibernate.core.schema.SchemaCreatorStrategyContextInitiator;
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -10,8 +17,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -27,7 +33,7 @@ public class OwnerDataSourceConfiguration {
     public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
     public static final String OWNER_DATA_SOURCE = "ownerDataSource";
 
-    @Bean
+    @Bean(name = "ownerDataSourceProperties")
     @ConfigurationProperties("spring.datasource.owner")
     public DataSourceProperties ownerDataSourceProperties() {
         return new DataSourceProperties();
@@ -70,18 +76,33 @@ public class OwnerDataSourceConfiguration {
 //        return bean;
 //    }
 
-    @Bean(name = "schema_session_factory")
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(ownerDataSource());
-        sessionFactory.setPackagesToScan(
-                "com.github.starnowski.posmulten.demos.model");
-        sessionFactory.setHibernateProperties(hibernateProperties());
+//    @Bean(name = "schema_session_factory")
+//    public LocalSessionFactoryBean sessionFactory() {
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//        sessionFactory.setDataSource(ownerDataSource());
+//        sessionFactory.setPackagesToScan(
+//                "com.github.starnowski.posmulten.demos.model");
+//        sessionFactory.setHibernateProperties(hibernateProperties());
+//
+//        return sessionFactory;
+//    }
 
-        return sessionFactory;
+    @Bean(name = "schema_session_factory")
+    public SessionFactory sessionFactory(@Qualifier("ownerDataSourceProperties") DataSourceProperties ownerDataSourceProperties) {
+        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+                .addInitiator(new SchemaCreatorStrategyContextInitiator())
+                .addInitiator(new DefaultSharedSchemaContextBuilderProviderInitiator())
+                .addInitiator(new DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator())
+                .addInitiator(new PosmultenUtilContextInitiator())
+                .applySettings(hibernateProperties(ownerDataSourceProperties))
+                .build();
+
+        SessionFactory factory = new MetadataSources(registry)
+                .buildMetadata().buildSessionFactory();
+        return factory;
     }
 
-    private final Properties hibernateProperties() {
+    private final Properties hibernateProperties(DataSourceProperties ownerDataSourceProperties) {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(
                 "hibernate.hbm2ddl.auto", "create");
@@ -99,6 +120,12 @@ public class OwnerDataSourceConfiguration {
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 "hibernate.posmulten.grantee", "posmhib4sb-user");
+        hibernateProperties.setProperty(
+                "hibernate.connection.url", ownerDataSourceProperties.getUrl());
+        hibernateProperties.setProperty(
+                "hibernate.connection.username", ownerDataSourceProperties.getUsername());
+        hibernateProperties.setProperty(
+                "hibernate.connection.password", ownerDataSourceProperties.getPassword());
         return hibernateProperties;
     }
 

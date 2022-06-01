@@ -27,7 +27,7 @@ public class TenantService {
     @Transactional(readOnly = true)
     public TenantDto findByName(String name)
     {
-        Tenant tenant = tenantRepository.findOne(name);
+        Tenant tenant = tenantRepository.findById(name).get();
         return tenant == null ? null : new TenantDto().setName(tenant.getName());
     }
 }

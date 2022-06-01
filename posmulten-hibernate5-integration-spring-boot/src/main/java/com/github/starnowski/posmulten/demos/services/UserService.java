@@ -29,7 +29,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDto read(UUID userId) {
-        User user = userRepository.findOne(userId);
+        User user = userRepository.findById(userId).get();
         return new UserDto().setUsername(user.getUsername()).setUserId(userId);
     }
 
