@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.demos.model;
 
-import com.github.starnowski.posmulten.demos.util.TenantAware;
+import com.github.starnowski.posmulten.hibernate.core.TenantTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,11 @@ import java.util.UUID;
 @Table(name = "user_info")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
-public class User extends TenantAware {
+@TenantTable
+public class User {
+
+    @Column(name = "tenant_id", insertable = false, updatable = false)
+    private String tenantId;
 
     @Id
     @GeneratedValue

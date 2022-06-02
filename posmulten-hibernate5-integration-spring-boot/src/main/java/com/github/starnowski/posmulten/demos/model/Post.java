@@ -1,6 +1,6 @@
 package com.github.starnowski.posmulten.demos.model;
 
-import com.github.starnowski.posmulten.demos.util.TenantAware;
+import com.github.starnowski.posmulten.hibernate.core.TenantTable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,8 @@ import java.util.Set;
 @Table(name = "posts")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Post extends TenantAware {
+@TenantTable
+public class Post {
 
     @Id
     @GeneratedValue
