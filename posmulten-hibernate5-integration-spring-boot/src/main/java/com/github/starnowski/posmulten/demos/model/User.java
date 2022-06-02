@@ -24,6 +24,6 @@ public class User extends TenantAware {
     private UUID userId;
     private String username;
     private String password;
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private Set<UserRole> roles;
 }
