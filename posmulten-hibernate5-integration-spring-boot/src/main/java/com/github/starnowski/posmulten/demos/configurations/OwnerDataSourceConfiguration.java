@@ -49,8 +49,7 @@ public class OwnerDataSourceConfiguration {
     }
 
     @Bean(name = "schema_session_factory")
-    public SessionFactory sessionFactory(@Qualifier("ownerDataSourceProperties") DataSourceProperties ownerDataSourceProperties,
-                                         @Qualifier("ownerDataSource") DataSource ownerDataSource) {
+    public SessionFactory sessionFactory(@Qualifier("ownerDataSource") DataSource ownerDataSource) {
 
         LocalSessionFactoryBuilder builder
                 = new LocalSessionFactoryBuilder(ownerDataSource);

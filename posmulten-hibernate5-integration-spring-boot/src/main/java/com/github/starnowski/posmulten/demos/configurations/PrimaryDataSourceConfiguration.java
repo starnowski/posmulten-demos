@@ -1,28 +1,27 @@
 package com.github.starnowski.posmulten.demos.configurations;
 
+import com.github.starnowski.posmulten.hibernate.core.connections.CurrentTenantPreparedStatementSetterInitiator;
+import com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaConnectionProviderInitiatorAdapter;
+import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderProviderInitiator;
 import org.hibernate.MultiTenancyStrategy;
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
-import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
+
+import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
@@ -48,36 +47,52 @@ public class PrimaryDataSourceConfiguration {
         return new JdbcTemplate(primaryDataSource());
     }
 
-    @Bean(name = "entityManagerFactory")
+    @Bean(name = "primary_session_factory")
     @Primary
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
-            @Autowired EntityManagerFactoryBuilder entityManagerFactoryBuilder,
-            @Autowired DataSource datasource,
-            @Autowired JpaProperties jpaProperties,
-            @Autowired MultiTenantConnectionProvider multiTenantConnectionProviderImpl,
-            @Autowired CurrentTenantIdentifierResolver currentTenantIdentifierResolverImpl) {
-        Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
-        properties.put("hibernate.hbm2ddl.auto", "none");
-        properties.put(Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA);
-        properties.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, multiTenantConnectionProviderImpl);
-        properties.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, currentTenantIdentifierResolverImpl);
-        LocalContainerEntityManagerFactoryBean bean = entityManagerFactoryBuilder
-                .dataSource(datasource)
-                .jta(false)
-                .packages("com.github.starnowski.posmulten.demos.model")
-                .persistenceUnit("pu")
-                .properties(properties)
-                .build();
-        bean.setPackagesToScan("com.github.starnowski.posmulten.demos.model");
-        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        bean.setJpaVendorAdapter(vendorAdapter);
-        return bean;
+    public SessionFactory sessionFactory(DataSource primaryDataSource) {
+
+        LocalSessionFactoryBuilder builder
+                = new LocalSessionFactoryBuilder(primaryDataSource);
+        builder.getStandardServiceRegistryBuilder()
+                .addInitiator(new SharedSchemaConnectionProviderInitiatorAdapter())
+                .addInitiator(new DefaultSharedSchemaContextBuilderProviderInitiator())
+                .addInitiator(new CurrentTenantPreparedStatementSetterInitiator())
+                .applySettings(hibernateProperties())
+                // https://stackoverflow.com/questions/39064124/unknownunwraptypeexception-cannot-unwrap-to-requested-type-javax-sql-datasourc
+                .applySetting(Environment.DATASOURCE, primaryDataSource);
+        builder.scanPackages("com.github.starnowski.posmulten.demos.model");
+        return builder.buildSessionFactory();
+    }
+
+    private final Properties hibernateProperties() {
+        Properties hibernateProperties = new Properties();
+        hibernateProperties.setProperty(
+                "hibernate.hbm2ddl.auto", "none");
+        hibernateProperties.setProperty(
+                "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        hibernateProperties.setProperty(
+                Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA.name());
+        hibernateProperties.setProperty(
+                Environment.MULTI_TENANT_CONNECTION_PROVIDER, "com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaMultiTenantConnectionProvider");
+        hibernateProperties.setProperty(
+                Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, "com.github.starnowski.posmulten.hibernate.core.CurrentTenantIdentifierResolverImpl");
+        hibernateProperties.setProperty(
+                "hibernate.archive.autodetection", "class");
+        hibernateProperties.setProperty(
+                "hibernate.format_sql", TRUE.toString());
+        hibernateProperties.setProperty(
+                "hibernate.show_sql", TRUE.toString());
+        hibernateProperties.setProperty(
+                "posmulten.schema.builder.provider", "lightweight");
+        return hibernateProperties;
     }
 
     @Bean
     @Primary
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        return new JpaTransactionManager(emf);
+    public PlatformTransactionManager hibernateTransactionManager(@Qualifier("primary_session_factory") SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager
+                = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory);
+        return transactionManager;
     }
 }
