@@ -88,13 +88,15 @@ public class OwnerDataSourceConfiguration {
 //    }
 
     @Bean(name = "schema_session_factory")
-    public SessionFactory sessionFactory(@Qualifier("ownerDataSourceProperties") DataSourceProperties ownerDataSourceProperties) {
+    public SessionFactory sessionFactory(@Qualifier("ownerDataSourceProperties") DataSourceProperties ownerDataSourceProperties,
+                                         @Qualifier("ownerDataSource") DataSource ownerDataSource) {
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .addInitiator(new SchemaCreatorStrategyContextInitiator())
                 .addInitiator(new DefaultSharedSchemaContextBuilderProviderInitiator())
                 .addInitiator(new DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator())
                 .addInitiator(new PosmultenUtilContextInitiator())
                 .applySettings(hibernateProperties(ownerDataSourceProperties))
+                .applySetting(Environment.DATASOURCE, ownerDataSource)
                 .build();
 
         SessionFactory factory = new MetadataSources(registry)
@@ -120,12 +122,12 @@ public class OwnerDataSourceConfiguration {
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 "hibernate.posmulten.grantee", "posmhib4sb-user");
-        hibernateProperties.setProperty(
-                "hibernate.connection.url", ownerDataSourceProperties.getUrl());
-        hibernateProperties.setProperty(
-                "hibernate.connection.username", ownerDataSourceProperties.getUsername());
-        hibernateProperties.setProperty(
-                "hibernate.connection.password", ownerDataSourceProperties.getPassword());
+//        hibernateProperties.setProperty(
+//                "hibernate.connection.url", ownerDataSourceProperties.getUrl());
+//        hibernateProperties.setProperty(
+//                "hibernate.connection.username", ownerDataSourceProperties.getUsername());
+//        hibernateProperties.setProperty(
+//                "hibernate.connection.password", ownerDataSourceProperties.getPassword());
         return hibernateProperties;
     }
 
