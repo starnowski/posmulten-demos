@@ -1,0 +1,8 @@
+DELETE FROM comments CASCADE;
+DELETE FROM posts CASCADE;
+DELETE FROM user_role CASCADE;
+DELETE FROM user_info CASCADE;
+DELETE FROM tenant_info CASCADE;
+
+
+
