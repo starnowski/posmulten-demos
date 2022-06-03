@@ -10,8 +10,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-import static com.github.starnowski.posmulten.demos.util.TenantContext.setCurrentTenant;
-import static com.github.starnowski.posmulten.demos.util.TenantContext.setInvalidTenant;
+import static com.github.starnowski.posmulten.demos.util.TenantContext.INVALID_TENANT_ID;
+import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext.setCurrentTenant;
+
 
 @Slf4j
 public class CurrentTenantResolverFilter implements Filter {
@@ -29,17 +30,18 @@ public class CurrentTenantResolverFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
+        setCurrentTenant(INVALID_TENANT_ID);
         String domain = domainResolver.resolve(httpServletRequest);
         if (domain != null) {
             TenantDto domainTenant = tenantService.findByName(domain);
             if (domainTenant != null) {
                 setCurrentTenant(domainTenant.getName());
             } else {
-                setInvalidTenant();
+                setCurrentTenant(INVALID_TENANT_ID);
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
-        setInvalidTenant();
+        setCurrentTenant(INVALID_TENANT_ID);
     }
 
     @Override
