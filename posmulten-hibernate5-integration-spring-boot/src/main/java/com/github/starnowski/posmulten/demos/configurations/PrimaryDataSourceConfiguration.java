@@ -83,7 +83,7 @@ public class PrimaryDataSourceConfiguration {
         hibernateProperties.setProperty(
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
-                "posmulten.schema.builder.provider", "lightweight");
+                "hibernate.posmulten.schema.builder.provider", "lightweight");
         return hibernateProperties;
     }
 
