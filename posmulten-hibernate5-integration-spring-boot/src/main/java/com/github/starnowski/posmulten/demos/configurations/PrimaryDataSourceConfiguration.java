@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.demos.configurations;
 
 import com.github.starnowski.posmulten.hibernate.core.connections.CurrentTenantPreparedStatementSetterInitiator;
 import com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaConnectionProviderInitiatorAdapter;
+import com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext;
 import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderProviderInitiator;
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.SessionFactory;
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
@@ -25,6 +27,7 @@ import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
+@EnableJpaRepositories(basePackages = "com.github.starnowski.posmulten.demos.dao", transactionManagerRef = "hibernateTransactionManager", entityManagerFactoryRef = "primary_session_factory")
 public class PrimaryDataSourceConfiguration {
 
     @Bean
@@ -61,6 +64,8 @@ public class PrimaryDataSourceConfiguration {
                 // https://stackoverflow.com/questions/39064124/unknownunwraptypeexception-cannot-unwrap-to-requested-type-javax-sql-datasourc
                 .applySetting(Environment.DATASOURCE, primaryDataSource);
         builder.scanPackages("com.github.starnowski.posmulten.demos.model");
+        //TODO Fix
+        CurrentTenantContext.setCurrentTenant("XXXXX");
         return builder.buildSessionFactory();
     }
 
@@ -87,7 +92,8 @@ public class PrimaryDataSourceConfiguration {
         return hibernateProperties;
     }
 
-    @Bean
+
+    @Bean(name = "hibernateTransactionManager")
     @Primary
     public PlatformTransactionManager hibernateTransactionManager(@Qualifier("primary_session_factory") SessionFactory sessionFactory) {
         HibernateTransactionManager transactionManager
