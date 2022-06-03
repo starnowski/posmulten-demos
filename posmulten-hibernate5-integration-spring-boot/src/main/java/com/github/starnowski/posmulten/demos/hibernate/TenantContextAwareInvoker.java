@@ -1,7 +1,7 @@
 package com.github.starnowski.posmulten.demos.hibernate;
 
 import com.github.starnowski.posmulten.demos.hibernate.exceptions.InvalidTenantContext;
-import com.github.starnowski.posmulten.demos.util.TenantContext;
+import com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext;
 import org.hibernate.SessionFactory;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +21,23 @@ public class TenantContextAwareInvoker {
 
     public <R,E extends Exception> R tryExecutedInCorrectTenantContext(SupplierWithGenericException<R,E> supplier, String tenant) throws E{
         assertSessionNotOpenedForOtherTenant(tenant);
-        String previousTenant = TenantContext.getCurrentTenant();
+        String previousTenant = CurrentTenantContext.getCurrentTenant();
         try {
-            TenantContext.setCurrentTenant(tenant);
+            CurrentTenantContext.setCurrentTenant(tenant);
             return supplier.get();
         } finally {
-            TenantContext.setCurrentTenant(previousTenant);
+            CurrentTenantContext.setCurrentTenant(previousTenant);
         }
     }
 
     public <R,E extends Exception> R tryExecuteTransactionInCorrectTenantContext(SupplierWithGenericException<R,E> supplier, String tenant) throws E{
         assertSessionNotOpenedForOtherTenant(tenant);
-        String previousTenant = TenantContext.getCurrentTenant();
+        String previousTenant = CurrentTenantContext.getCurrentTenant();
         try {
-            TenantContext.setCurrentTenant(tenant);
+            CurrentTenantContext.setCurrentTenant(tenant);
             return transactionService.executeTransaction(supplier);
         } finally {
-            TenantContext.setCurrentTenant(previousTenant);
+            CurrentTenantContext.setCurrentTenant(previousTenant);
         }
     }
 

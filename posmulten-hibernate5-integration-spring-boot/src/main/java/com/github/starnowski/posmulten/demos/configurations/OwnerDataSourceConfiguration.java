@@ -30,6 +30,8 @@ public class OwnerDataSourceConfiguration {
 
     public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
     public static final String OWNER_DATA_SOURCE = "ownerDataSource";
+    public static final String SET_CURRENT_TENANT_FUNCTION_NAME = "set_pos_demo_tenant";
+    public static final String TENANT_PROPERTY_NAME = "posdemo.tenant";
 
     @Bean(name = "ownerDataSourceProperties")
     @ConfigurationProperties("spring.datasource.owner")
@@ -83,6 +85,10 @@ public class OwnerDataSourceConfiguration {
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 "hibernate.posmulten.grantee", "posmhib4sb-user");
+        hibernateProperties.setProperty(
+                com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
+        hibernateProperties.setProperty(
+                com.github.starnowski.posmulten.hibernate.core.Properties.ID_PROPERTY, TENANT_PROPERTY_NAME);
         return hibernateProperties;
     }
 

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+import static com.github.starnowski.posmulten.demos.configurations.OwnerDataSourceConfiguration.SET_CURRENT_TENANT_FUNCTION_NAME;
 import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
@@ -91,6 +92,8 @@ public class PrimaryDataSourceConfiguration {
                 "hibernate.posmulten.schema.builder.provider", "lightweight");
         hibernateProperties.setProperty(
                 Environment.PERSISTENCE_UNIT_NAME, "pu");
+        hibernateProperties.setProperty(
+                com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
         return hibernateProperties;
     }
 
