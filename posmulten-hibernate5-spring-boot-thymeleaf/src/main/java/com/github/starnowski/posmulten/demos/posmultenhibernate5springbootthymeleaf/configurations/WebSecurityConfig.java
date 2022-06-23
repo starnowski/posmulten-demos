@@ -2,6 +2,8 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.*;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLoginUrlAuthenticationEntryPoint;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainUrlAuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +22,8 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
+
+import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLoginUrlAuthenticationEntryPoint.DOMAIN_URL_PART;
 
 
 @Configuration
