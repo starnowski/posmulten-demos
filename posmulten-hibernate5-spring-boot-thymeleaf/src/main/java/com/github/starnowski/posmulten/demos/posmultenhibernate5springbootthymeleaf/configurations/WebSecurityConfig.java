@@ -3,6 +3,8 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.CorrectTenantContextFilter;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.CurrentTenantResolverFilter;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.DomainExistCheckFilter;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.TenantFilter;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -156,7 +158,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Filter tenantFilter() {
+    public TenantFilter tenantFilter() {
         return new TenantFilter();
     }
 
