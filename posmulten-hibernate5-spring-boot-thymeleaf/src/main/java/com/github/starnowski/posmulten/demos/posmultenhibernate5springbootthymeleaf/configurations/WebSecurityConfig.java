@@ -1,5 +1,7 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations;
 
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.CorrectTenantContextFilter;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.CurrentTenantResolverFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -135,13 +137,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public Filter correctTenantContextFilter()
+    public CorrectTenantContextFilter correctTenantContextFilter()
     {
         return new CorrectTenantContextFilter();
     }
 
     @Bean
-    public Filter currentTenantResolverFilter()
+    public CurrentTenantResolverFilter currentTenantResolverFilter()
     {
         return new CurrentTenantResolverFilter();
     }
