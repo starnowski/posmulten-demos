@@ -1,9 +1,10 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations;
 
-import com.github.starnowski.posmulten.hibernate.core.connections.CurrentTenantPreparedStatementSetterInitiator;
-import com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaConnectionProviderInitiatorAdapter;
-import com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext;
+import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator;
 import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderProviderInitiator;
+import com.github.starnowski.posmulten.hibernate.core.context.metadata.PosmultenUtilContextInitiator;
+import com.github.starnowski.posmulten.hibernate.core.schema.PosmultenSchemaManagementTool;
+import com.github.starnowski.posmulten.hibernate.core.schema.SchemaCreatorStrategyContextInitiator;
 import org.hibernate.MultiTenancyStrategy;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
@@ -12,8 +13,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -22,79 +22,78 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME;
 import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
-@EnableJpaRepositories(basePackages = "com.github.starnowski.posmulten.demos.dao", transactionManagerRef = "hibernateTransactionManager", entityManagerFactoryRef = "primary_session_factory")
-public class PrimaryDataSourceConfiguration {
+public class OwnerDataSourceConfiguration {
 
-    @Bean
-    @Primary
-    @ConfigurationProperties("spring.datasource.primary")
-    public DataSourceProperties primaryDataSourceProperties() {
+    public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
+    public static final String OWNER_DATA_SOURCE = "ownerDataSource";
+    public static final String SET_CURRENT_TENANT_FUNCTION_NAME = "set_pos_demo_tenant";
+    public static final String TENANT_PROPERTY_NAME = "posdemo.tenant";
+
+    @Bean(name = "ownerDataSourceProperties")
+    @ConfigurationProperties("spring.datasource.owner")
+    public DataSourceProperties ownerDataSourceProperties() {
         return new DataSourceProperties();
     }
 
-    @Bean
-    @Primary
-    @ConfigurationProperties("spring.datasource.primary.configuration")
-    public DataSource primaryDataSource() {
-        return primaryDataSourceProperties().initializeDataSourceBuilder().build();
+    @Bean(name = "ownerDataSource")
+    @ConfigurationProperties("spring.datasource.owner.configuration")
+    public DataSource ownerDataSource() {
+        return ownerDataSourceProperties().initializeDataSourceBuilder().build();
     }
 
+    @Bean(name = "ownerJdbcTemplate")
+    public JdbcTemplate ownerJdbcTemplate() {
+        return new JdbcTemplate(ownerDataSource());
+    }
 
-    @Bean(name = "primary_session_factory")
-    @Primary
-    public SessionFactory sessionFactory(DataSource primaryDataSource) {
+    @Bean(name = "schema_session_factory")
+    public SessionFactory sessionFactory(@Qualifier("ownerDataSource") DataSource ownerDataSource) {
 
         LocalSessionFactoryBuilder builder
-                = new LocalSessionFactoryBuilder(primaryDataSource);
+                = new LocalSessionFactoryBuilder(ownerDataSource);
         builder.getStandardServiceRegistryBuilder()
-                .addInitiator(new SharedSchemaConnectionProviderInitiatorAdapter())
+                .addInitiator(new SchemaCreatorStrategyContextInitiator())
                 .addInitiator(new DefaultSharedSchemaContextBuilderProviderInitiator())
-                .addInitiator(new CurrentTenantPreparedStatementSetterInitiator())
+                .addInitiator(new DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator())
+                .addInitiator(new PosmultenUtilContextInitiator())
                 .applySettings(hibernateProperties())
                 // https://stackoverflow.com/questions/39064124/unknownunwraptypeexception-cannot-unwrap-to-requested-type-javax-sql-datasourc
-                .applySetting(Environment.DATASOURCE, primaryDataSource);
+                .applySetting(Environment.DATASOURCE, ownerDataSource);
         builder.scanPackages("com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model");
-        //TODO Fix
-        CurrentTenantContext.setCurrentTenant("XXXXX");
         return builder.buildSessionFactory();
     }
 
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(
-                "hibernate.hbm2ddl.auto", "none");
+                "hibernate.hbm2ddl.auto", "create");
         hibernateProperties.setProperty(
                 "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.setProperty(
-                Environment.MULTI_TENANT, MultiTenancyStrategy.SCHEMA.name());
-        hibernateProperties.setProperty(
-                Environment.MULTI_TENANT_CONNECTION_PROVIDER, "com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaMultiTenantConnectionProvider");
-        hibernateProperties.setProperty(
-                Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, "com.github.starnowski.posmulten.hibernate.core.CurrentTenantIdentifierResolverImpl");
+                Environment.MULTI_TENANT, MultiTenancyStrategy.NONE.name());
         hibernateProperties.setProperty(
                 "hibernate.archive.autodetection", "class");
+        hibernateProperties.setProperty(
+                "hibernate.schema_management_tool", PosmultenSchemaManagementTool.class.getName());
         hibernateProperties.setProperty(
                 "hibernate.format_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
-                "hibernate.posmulten.schema.builder.provider", "lightweight");
+                "hibernate.posmulten.grantee", "posmhib4sb-user");
         hibernateProperties.setProperty(
-                Environment.PERSISTENCE_UNIT_NAME, "pu");
+                com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
         hibernateProperties.setProperty(
-                SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
+                com.github.starnowski.posmulten.hibernate.core.Properties.ID_PROPERTY, TENANT_PROPERTY_NAME);
         return hibernateProperties;
     }
 
-
-    @Bean(name = "hibernateTransactionManager")
-    @Primary
-    public PlatformTransactionManager hibernateTransactionManager(@Qualifier("primary_session_factory") SessionFactory sessionFactory) {
+    @Bean(name = OWNER_TRANSACTION_MANAGER)
+    public PlatformTransactionManager hibernateTransactionManager(@Qualifier("schema_session_factory") SessionFactory sessionFactory) {
         HibernateTransactionManager transactionManager
                 = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory);
