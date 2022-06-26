@@ -1,6 +1,5 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories;
 
-import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.TenantInfo;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
