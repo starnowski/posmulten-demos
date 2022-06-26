@@ -118,15 +118,15 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'polish.dude.eu'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'my.doc.com'")).isEqualTo(0);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'kglenny'")).isEqualTo(0);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'kglenny'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'mcaine'")).isEqualTo(0);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mcaine'")).isEqualTo(1);
 
         HtmlPage loginPage = this.webClient.getPage("/app/polish.dude.eu/home");
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
         final HtmlTextInput usernameField = resendForm.getInputByName("username");
         final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
         final HtmlInput sendButton = resendForm.getInputByName("subButton");
-        usernameField.setValueAttribute("kglenny");
+        usernameField.setValueAttribute("mcaine");
         passwordField.setValueAttribute("pass");
         final HtmlPage homePage = sendButton.click();
         assertThat(homePage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
