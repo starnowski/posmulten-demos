@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 public class TenantInfo {
 
     @Id
+    @Column(name = "tenant_id")
     String tenantId;
 
     String domain;

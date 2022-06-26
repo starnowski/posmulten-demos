@@ -19,6 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
 
+import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
+import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.*;
@@ -31,10 +33,10 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, MULTI_TENANT_CONTEXT_AWARE_CONTROLLER_TEST_SCRIPT_PATH},
-        config = @SqlConfig(transactionMode = ISOLATED),
+        config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
         executionPhase = BEFORE_TEST_METHOD)
 @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
-        config = @SqlConfig(transactionMode = ISOLATED),
+        config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
         executionPhase = AFTER_TEST_METHOD)
 public class MultiTenantContextAwareControllerTest {
 
@@ -163,8 +165,8 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'polish.dude.eu'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'my.doc.com'")).isEqualTo(0);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'starnowski'")).isEqualTo(1);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'kglenny'")).isEqualTo(0);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'kglenny'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = '/mcaine'")).isEqualTo(0);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = '/mcaine'")).isEqualTo(1);
 
         HtmlPage loginPage = this.webClient.getPage("/app/my.doc.com/home");
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
@@ -173,7 +175,7 @@ public class MultiTenantContextAwareControllerTest {
         final HtmlInput sendButton = resendForm.getInputByName("subButton");
 
         // when
-        usernameField.setValueAttribute("kglenny");
+        usernameField.setValueAttribute("/mcaine");
         passwordField.setValueAttribute("pass");
         final HtmlPage homePage = sendButton.click();
 
@@ -186,11 +188,11 @@ public class MultiTenantContextAwareControllerTest {
     @Test
     public void shouldBeForbiddenAuditorAndAdminResourcesForUserWithoutAnyRole() throws IOException {
         // given
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'kglenny' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = '/mcaine' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(0);
 
         // when
-        loginUserForDomain("kglenny", "polish.dude.eu");
+        loginUserForDomain("/mcaine", "polish.dude.eu");
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
@@ -201,12 +203,12 @@ public class MultiTenantContextAwareControllerTest {
     @Test
     public void shouldBeForbiddenAdminResourcesForUserWithAuditorRole() throws IOException {
         // given
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mkyc' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'dude' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15' and role='AUDITOR'")).isEqualTo(1);
 
         // when
-        loginUserForDomain("mkyc", "polish.dude.eu");
+        loginUserForDomain("dude", "polish.dude.eu");
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
