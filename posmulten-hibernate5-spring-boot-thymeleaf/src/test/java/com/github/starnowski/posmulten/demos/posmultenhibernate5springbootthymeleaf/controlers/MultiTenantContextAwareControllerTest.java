@@ -165,8 +165,8 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'polish.dude.eu'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'my.doc.com'")).isEqualTo(0);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'starnowski'")).isEqualTo(1);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = '/mcaine'")).isEqualTo(0);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = '/mcaine'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds' and username = 'mcaine'")).isEqualTo(0);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mcaine'")).isEqualTo(1);
 
         HtmlPage loginPage = this.webClient.getPage("/app/my.doc.com/home");
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
@@ -175,7 +175,7 @@ public class MultiTenantContextAwareControllerTest {
         final HtmlInput sendButton = resendForm.getInputByName("subButton");
 
         // when
-        usernameField.setValueAttribute("/mcaine");
+        usernameField.setValueAttribute("mcaine");
         passwordField.setValueAttribute("pass");
         final HtmlPage homePage = sendButton.click();
 
@@ -188,11 +188,11 @@ public class MultiTenantContextAwareControllerTest {
     @Test
     public void shouldBeForbiddenAuditorAndAdminResourcesForUserWithoutAnyRole() throws IOException {
         // given
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = '/mcaine' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mcaine' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(0);
 
         // when
-        loginUserForDomain("/mcaine", "polish.dude.eu");
+        loginUserForDomain("mcaine", "polish.dude.eu");
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
