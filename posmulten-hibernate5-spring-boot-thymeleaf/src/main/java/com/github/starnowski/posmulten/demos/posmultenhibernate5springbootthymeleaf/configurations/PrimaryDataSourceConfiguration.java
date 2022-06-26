@@ -22,13 +22,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-import static com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME;
 import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
 @EnableJpaRepositories(basePackages = "com.github.starnowski.posmulten.demos.dao", transactionManagerRef = "hibernateTransactionManager", entityManagerFactoryRef = "primary_session_factory")
 public class PrimaryDataSourceConfiguration {
+
+    public static final String SET_CURRENT_TENANT_FUNCTION_NAME = "set_pos_demo_tenant";
 
     @Bean
     @Primary
@@ -87,7 +88,7 @@ public class PrimaryDataSourceConfiguration {
         hibernateProperties.setProperty(
                 Environment.PERSISTENCE_UNIT_NAME, "pu");
         hibernateProperties.setProperty(
-                SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
+                com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
         return hibernateProperties;
     }
 
