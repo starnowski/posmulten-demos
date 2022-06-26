@@ -26,7 +26,7 @@ import static java.lang.Boolean.TRUE;
 
 @EnableTransactionManagement
 @Configuration
-@EnableJpaRepositories(basePackages = "com.github.starnowski.posmulten.demos.dao", transactionManagerRef = "hibernateTransactionManager", entityManagerFactoryRef = "primary_session_factory")
+@EnableJpaRepositories(basePackages = "com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories", transactionManagerRef = "hibernateTransactionManager", entityManagerFactoryRef = "primary_session_factory")
 public class PrimaryDataSourceConfiguration {
 
     public static final String SET_CURRENT_TENANT_FUNCTION_NAME = "set_pos_demo_tenant";
