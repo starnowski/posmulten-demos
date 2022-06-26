@@ -1,7 +1,5 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security;
 
-import com.github.starnowski.posmulten.demos.dao.UserRepository;
-import com.github.starnowski.posmulten.demos.model.User;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.User;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRole().name()))
         );
 
-        return new TenantUser(user.getUsername(), user.getPassword(), grantedAuthorities, user.getTenantId(), user.getUserId());
+        return new TenantUser(user.getUsername(), user.getPassword(), grantedAuthorities, user.getTenantId());
     }
 }

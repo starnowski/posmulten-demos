@@ -1,8 +1,6 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services;
 
-import com.github.starnowski.posmulten.demos.dao.UserRepository;
-import com.github.starnowski.posmulten.demos.dto.UserDto;
-import com.github.starnowski.posmulten.demos.model.User;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto.UserDto;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.User;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
