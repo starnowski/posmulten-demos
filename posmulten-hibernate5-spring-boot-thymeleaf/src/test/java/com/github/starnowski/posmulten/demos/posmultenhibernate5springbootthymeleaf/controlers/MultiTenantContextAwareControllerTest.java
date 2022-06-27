@@ -172,7 +172,7 @@ public class MultiTenantContextAwareControllerTest {
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
         final HtmlTextInput usernameField = resendForm.getInputByName("username");
         final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
-        final HtmlInput sendButton = resendForm.getInputByName("subButton");
+        final HtmlButton sendButton = resendForm.getButtonByName("subButton");
 
         // when
         usernameField.setValueAttribute("mcaine");
@@ -239,11 +239,12 @@ public class MultiTenantContextAwareControllerTest {
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
         final HtmlTextInput usernameField = resendForm.getInputByName("username");
         final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
-        final HtmlInput sendButton = resendForm.getInputByName("subButton");
+//        final HtmlInput sendButton = resendForm.getInputByName("subButton");
+        final HtmlButton sendButton = resendForm.getButtonByName("subButton");
 
         usernameField.setValueAttribute(username);
         passwordField.setValueAttribute("pass");
-        final HtmlPage homePage = sendButton.click();
+        sendButton.click();
     }
 
     private void assertHttpResourceIsForbiddenForCurrentLoggedUser(String resourcePath) throws IOException {
