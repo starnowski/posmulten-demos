@@ -4,10 +4,9 @@ import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.*;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 
@@ -29,7 +28,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, MULTI_TENANT_CONTEXT_AWARE_CONTROLLER_TEST_SCRIPT_PATH},
@@ -49,14 +48,14 @@ public class MultiTenantContextAwareControllerTest {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         System.out.println("encrypted password:" + bCryptPasswordEncoder.encode("pass"));
         webClient.getCookieManager().clearCookies();
         webClient.getCookieManager().setCookiesEnabled(true);
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldRedirectUserToCorrectLoginUrlAfterTryingToReachSecuredResource() throws Exception {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
@@ -76,7 +75,7 @@ public class MultiTenantContextAwareControllerTest {
     //http://localhost:8080/app/my.doc.com/login
 
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldDisplayLoginPageForExistedDomain() throws Exception {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
@@ -90,7 +89,7 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(responseStatus).isEqualTo(OK.value());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldLoginAsUserExistedInCurrentDomain() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
@@ -112,7 +111,7 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(homePage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/my.doc.com/home");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldReturnForbiddenErrorPageForLoggedUserFromOtherDomain() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
@@ -135,7 +134,7 @@ public class MultiTenantContextAwareControllerTest {
         // when
         try {
             this.webClient.getPage("/app/my.doc.com/home");
-            Assert.fail("Response should contains 403 status");
+            Assertions.fail("Response should contains 403 status");
         } catch (FailingHttpStatusCodeException exception) {
             // then
             assertThat(exception.getStatusCode()).isEqualTo(FORBIDDEN.value());
@@ -143,7 +142,7 @@ public class MultiTenantContextAwareControllerTest {
 
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldDisplayPageWithStatusNotFoundForNoneExistDomain() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "domain = 'no.such.com'")).isEqualTo(0);
@@ -151,14 +150,14 @@ public class MultiTenantContextAwareControllerTest {
         // when
         try {
             this.webClient.getPage("/app/no.such.com/home");
-            Assert.fail("Response should contains 401 status");
+            Assertions.fail("Response should contains 401 status");
         } catch (FailingHttpStatusCodeException exception) {
             // then
             assertThat(exception.getStatusCode()).isEqualTo(NOT_FOUND.value());
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldFailToLoginUserFromOtherDomain() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
@@ -185,7 +184,7 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(homePage.getWebResponse().getWebRequest().getUrl().getQuery()).contains("error");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldBeForbiddenAuthorAndAdminResourcesForUserWithoutAnyRole() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mcaine' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
@@ -200,7 +199,7 @@ public class MultiTenantContextAwareControllerTest {
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldBeForbiddenAdminResourcesForUserWithAuthorRole() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'dude' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
@@ -216,7 +215,7 @@ public class MultiTenantContextAwareControllerTest {
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void shouldBeAvailableAllResourcesForUserWithAdminRole() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'starnowski' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14'")).isEqualTo(1);
@@ -251,7 +250,7 @@ public class MultiTenantContextAwareControllerTest {
         // when
         try {
             this.webClient.getPage(resourcePath);
-            Assert.fail("Response should contains 403 status");
+            Assertions.fail("Response should contains 403 status");
         } catch (FailingHttpStatusCodeException exception) {
             // then
             assertThat(exception.getStatusCode()).isEqualTo(FORBIDDEN.value());
