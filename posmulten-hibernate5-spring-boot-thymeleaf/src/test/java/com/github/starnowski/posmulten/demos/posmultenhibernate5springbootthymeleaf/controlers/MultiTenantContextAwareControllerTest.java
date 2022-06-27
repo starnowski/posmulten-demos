@@ -186,7 +186,7 @@ public class MultiTenantContextAwareControllerTest {
     }
 
     @Test
-    public void shouldBeForbiddenAuditorAndAdminResourcesForUserWithoutAnyRole() throws IOException {
+    public void shouldBeForbiddenAuthorAndAdminResourcesForUserWithoutAnyRole() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'mcaine' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13'")).isEqualTo(0);
@@ -201,11 +201,11 @@ public class MultiTenantContextAwareControllerTest {
     }
 
     @Test
-    public void shouldBeForbiddenAdminResourcesForUserWithAuditorRole() throws IOException {
+    public void shouldBeForbiddenAdminResourcesForUserWithAuthorRole() throws IOException {
         // given
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'dude' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
         assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15'")).isEqualTo(1);
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15' and role='AUDITOR'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15' and role='AUTHOR'")).isEqualTo(1);
 
         // when
         loginUserForDomain("dude", "polish.dude.eu");

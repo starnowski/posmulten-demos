@@ -12,7 +12,7 @@ INSERT INTO user_info (user_id, username, tenant_id, password) VALUES ('a0eebc99
 INSERT INTO user_info (user_id, username, tenant_id, password) VALUES ('a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'dude', 'xds1', '$2a$10$xsaKSi2sqp9DnWlgG8Ah9.DNwxCA9zblyGAAbYub4AAs1LBN6CUnO');
 
 INSERT INTO user_role (id, role, user_id, tenant_id) VALUES (nextval( 'hibernate_sequence' ), 'ADMIN', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'xds1'); -- starnowski as ADMIN
-INSERT INTO user_role (id, role, user_id, tenant_id) VALUES (nextval( 'hibernate_sequence' ), 'AUDITOR', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'xds1'); -- dude as AUDITOR
+INSERT INTO user_role (id, role, user_id, tenant_id) VALUES (nextval( 'hibernate_sequence' ), 'AUTHOR', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'xds1'); -- dude as AUTHOR
 
 --- tenant_info
 INSERT INTO tenant_info (tenant_id, domain) VALUES ('xds', 'my.doc.com');
