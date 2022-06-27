@@ -125,7 +125,7 @@ public class MultiTenantContextAwareControllerTest {
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
         final HtmlTextInput usernameField = resendForm.getInputByName("username");
         final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
-        final HtmlInput sendButton = resendForm.getInputByName("subButton");
+        final HtmlButton sendButton = resendForm.getButtonByName("subButton");
         usernameField.setValueAttribute("mcaine");
         passwordField.setValueAttribute("pass");
         final HtmlPage homePage = sendButton.click();
