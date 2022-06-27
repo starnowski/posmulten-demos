@@ -36,4 +36,20 @@ public class MultiTenantContextAwareController {
         return "hello-template";
     }
 
+    @GetMapping(value = {"/config"})
+    public String getConfig(
+            @PathVariable("domain") String domain, Model model) {
+        log.debug("String getHome()");
+        model.addAttribute("domainPrefix", "/app/" + domain);
+        return "config-page";
+    }
+
+    @GetMapping(value = {"/assessments"})
+    public String getAssessments(
+            @PathVariable("domain") String domain, Model model) {
+        log.debug("String getAssessments()");
+        model.addAttribute("domainPrefix", "/app/" + domain);
+        return "assessments";
+    }
+    //config-page
 }
