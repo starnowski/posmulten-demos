@@ -48,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/app/*/login").permitAll()
                 .antMatchers("/app/*/j_spring_security_check").permitAll()
                 .antMatchers("/app/*/posts").hasAnyRole("AUTHOR", "ADMIN")
+                //TODO
+                .antMatchers("/app/*/assessments").hasAnyRole("AUTHOR", "ADMIN")
                 .antMatchers("/app/*/config").hasRole("ADMIN")
                 .antMatchers("/app/**").authenticated()
                 .and().formLogin().loginProcessingUrl("/app/*/j_spring_security_check")

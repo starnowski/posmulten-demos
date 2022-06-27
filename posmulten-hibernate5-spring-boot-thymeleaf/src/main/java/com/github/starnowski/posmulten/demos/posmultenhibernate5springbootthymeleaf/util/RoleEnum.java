@@ -2,5 +2,5 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 
 public enum RoleEnum {
     ADMIN,
-    GUEST;
+    AUTHOR;
 }
