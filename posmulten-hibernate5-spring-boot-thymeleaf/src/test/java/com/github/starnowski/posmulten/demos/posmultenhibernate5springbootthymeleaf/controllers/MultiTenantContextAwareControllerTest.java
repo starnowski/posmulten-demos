@@ -1,4 +1,4 @@
-package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controlers;
+package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;

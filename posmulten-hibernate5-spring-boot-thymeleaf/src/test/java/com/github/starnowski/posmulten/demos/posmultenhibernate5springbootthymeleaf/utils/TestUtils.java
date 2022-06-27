@@ -14,7 +14,7 @@ import static com.github.starnowski.posmulten.demos.posmultenhibernate5springboo
 public class TestUtils {
 
     public static final String CLEAR_DATABASE_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/posmultenhibernate5springbootthymeleaf/clean-database.sql";
-    public static final String MULTI_TENANT_CONTEXT_AWARE_CONTROLLER_TEST_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/posmultenhibernate5springbootthymeleaf/controlers/MultiTenantContextAwareControllerTest-script.sql";
+    public static final String MULTI_TENANT_CONTEXT_AWARE_CONTROLLER_TEST_SCRIPT_PATH = "/com/github/starnowski/posmulten/demos/posmultenhibernate5springbootthymeleaf/controllers/MultiTenantContextAwareControllerTest-script.sql";
 
     public static int countNumberOfRecordsWhere(JdbcTemplate jdbcTemplate, String table, String condition) {
         return countNumberOfRecordsWhereByTenantId(jdbcTemplate, table, condition, TenantUser.ROOT_TENANT_ID);
