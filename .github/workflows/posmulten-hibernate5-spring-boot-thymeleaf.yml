@@ -58,4 +58,4 @@ jobs:
         PGPASSWORD: "postgres"
 
     - name: Build with Maven
-      run: cd posmulten-hibernate5-spring-boot-thymeleaf && mvn -DskipTests clean install && mvn test && mvn -P !integration-tests,e2e-tests test
+      run: cd posmulten-hibernate5-spring-boot-thymeleaf && mvn clean install && mvn test && mvn -P !integration-tests,e2e-tests test
