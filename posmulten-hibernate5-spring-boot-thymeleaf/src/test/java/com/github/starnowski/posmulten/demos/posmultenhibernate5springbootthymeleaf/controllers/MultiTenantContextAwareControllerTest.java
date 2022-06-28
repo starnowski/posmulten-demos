@@ -65,14 +65,10 @@ public class MultiTenantContextAwareControllerTest {
         WebResponse response = homePage.getWebResponse();
         int responseStatus = response.getStatusCode();
 
-        //http://localhost:8080/app/\{tenantDomain\}/login
-
         // then
         assertThat(responseStatus).isEqualTo(OK.value());
         assertThat(response.getWebRequest().getUrl().getPath()).isEqualTo("/app/my.doc.com/login");
     }
-
-    //http://localhost:8080/app/my.doc.com/login
 
 
     @org.junit.jupiter.api.Test
@@ -238,7 +234,6 @@ public class MultiTenantContextAwareControllerTest {
         HtmlForm resendForm = loginPage.getFormByName("loginForm");
         final HtmlTextInput usernameField = resendForm.getInputByName("username");
         final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
-//        final HtmlInput sendButton = resendForm.getInputByName("subButton");
         final HtmlButton sendButton = resendForm.getButtonByName("subButton");
 
         usernameField.setValueAttribute(username);

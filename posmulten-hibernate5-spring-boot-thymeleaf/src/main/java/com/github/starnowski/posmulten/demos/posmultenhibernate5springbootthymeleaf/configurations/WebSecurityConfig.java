@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -42,9 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests().antMatchers("/posts", "/posts/**", "/users", "/users/**", "/v2/api-docs", "/swagger-ui.html")
                 .permitAll()
-        .and()
+                .and()
                 .csrf().disable()
-            .authorizeRequests()
+                .authorizeRequests()
                 .antMatchers("/app/*/login").permitAll()
                 .antMatchers("/app/*/j_spring_security_check").permitAll()
                 .antMatchers("/app/*/posts").hasAnyRole("AUTHOR", "ADMIN")
@@ -55,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().formLogin().loginProcessingUrl("/app/*/j_spring_security_check")
                 .failureHandler(domainUrlAuthenticationFailureHandler())
                 .permitAll()
-        .and().exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
+                .and().exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(correctTenantContextFilter(), SecurityContextPersistenceFilter.class);
     }
@@ -71,14 +70,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     @Bean
-    public AuthenticationEntryPoint domainLoginUrlAuthenticationEntryPoint()
-    {
+    public AuthenticationEntryPoint domainLoginUrlAuthenticationEntryPoint() {
         return new DomainLoginUrlAuthenticationEntryPoint("/app/" + DOMAIN_URL_PART + "/login");
     }
 
     @Bean
-    public DomainResolver domainResolver()
-    {
+    public DomainResolver domainResolver() {
         return new DomainResolver("/app/");
     }
 
@@ -130,8 +127,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public FilterRegistrationBean optionalTenantFilterRegistrationBean()
-    {
+    public FilterRegistrationBean optionalTenantFilterRegistrationBean() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(optionalTenantFilterRegistration());
         registration.setEnabled(true);
@@ -142,20 +138,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public CorrectTenantContextFilter correctTenantContextFilter()
-    {
+    public CorrectTenantContextFilter correctTenantContextFilter() {
         return new CorrectTenantContextFilter();
     }
 
     @Bean
-    public CurrentTenantResolverFilter currentTenantResolverFilter()
-    {
+    public CurrentTenantResolverFilter currentTenantResolverFilter() {
         return new CurrentTenantResolverFilter();
     }
 
     @Bean
-    public DomainExistCheckFilter domainExistCheckFilter()
-    {
+    public DomainExistCheckFilter domainExistCheckFilter() {
         return new DomainExistCheckFilter();
     }
 
@@ -165,14 +158,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public OptionalTenantFilter optionalTenantFilterRegistration()
-    {
+    public OptionalTenantFilter optionalTenantFilterRegistration() {
         return new OptionalTenantFilter();
     }
 
     @Bean
-    public AuthenticationFailureHandler domainUrlAuthenticationFailureHandler()
-    {
+    public AuthenticationFailureHandler domainUrlAuthenticationFailureHandler() {
         return new DomainUrlAuthenticationFailureHandler("/login?error", "/app/" + DomainUrlAuthenticationFailureHandler.DOMAIN_URL_PART + "/login?error", domainResolver());
     }
 }
