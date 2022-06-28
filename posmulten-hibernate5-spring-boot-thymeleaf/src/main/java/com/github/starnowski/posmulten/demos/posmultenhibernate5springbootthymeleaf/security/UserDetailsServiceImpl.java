@@ -25,6 +25,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
+        if (user == null) {
+            throw new UsernameNotFoundException("No such user");
+        }
+
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         Optional.ofNullable(user.getRoles()).orElse(new HashSet<>()).forEach(userRole ->
                 grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userRole.getRole().name()))
