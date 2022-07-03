@@ -36,6 +36,7 @@ public class CurrentTenantResolverFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String domain = domainResolver.resolve(httpServletRequest);
         if (domain != null) {
+            //TODO Write why setting tenant id is important here and why only this filter should do that !
             setCurrentTenant(ROOT_TENANT_ID);
             TenantInfo domainTenant = tenantInfoRepository.findByDomain(domain);
             if (domainTenant != null) {
