@@ -13,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser.ROOT_TENANT_ID;
-import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext.setCurrentTenant;
-
 public class CorrectTenantContextFilter  implements Filter {
 
     @Autowired
@@ -39,7 +36,7 @@ public class CorrectTenantContextFilter  implements Filter {
         if (user != null) {
             String domain = domainResolver.resolve(httpServletRequest);
             if (domain != null) {
-                setCurrentTenant(ROOT_TENANT_ID);
+//                setCurrentTenant(ROOT_TENANT_ID);
                 TenantInfo domainTenant = tenantInfoRepository.findByDomain(domain);
                 if (domainTenant != null && !domainTenant.getTenantId().equals(user.getTenantId())) {
                     HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
