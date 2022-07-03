@@ -15,13 +15,13 @@ public class MultiTenantContextAwareAdminController {
     @Autowired
     private UserService userService;
 
-    @GetMapping(value = {"/app/{domain}/admin"})
+    @GetMapping(value = {"/app/{domain}/users"})
     public String getUsers(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getUsers()");
         model.addAttribute("domainPrefix", "/app/" + domain);
         model.addAttribute("allUsers", userService.getAllUsers());
-        return "posts";
+        return "users";
     }
     //config-page
 }

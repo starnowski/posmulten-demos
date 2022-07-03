@@ -227,6 +227,30 @@ public class MultiTenantContextAwareControllerTest {
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/config", "Page for config");
     }
 
+    @org.junit.jupiter.api.Test
+    public void shouldDisplayAllUsersInTableForUserWithAdminRole() throws IOException {
+        // given
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'starnowski' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_role", "tenant_id = 'xds1' and user_id = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14' and role='ADMIN'")).isEqualTo(1);
+
+        // when
+        loginUserForDomain("starnowski", "polish.dude.eu");
+
+        // then
+        // a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13");
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "mcaine");
+
+        // a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14");
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "starnowski");
+
+        // a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15");
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "dude");
+    }
+
     //TODO Addedd test with ACL test cases
 
     private void loginUserForDomain(String username, String domain) throws IOException {
