@@ -191,7 +191,7 @@ public class MultiTenantContextAwareControllerTest {
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
-        assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/assessments");
+        assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/posts");
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config");
     }
 
@@ -207,7 +207,7 @@ public class MultiTenantContextAwareControllerTest {
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
-        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/assessments", "Page for assessments!");
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/posts", "Page for posts!");
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config");
     }
 
@@ -223,7 +223,7 @@ public class MultiTenantContextAwareControllerTest {
 
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
-        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/assessments", "Page for assessments!");
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/posts", "Page for posts!");
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/config", "Page for config");
     }
 

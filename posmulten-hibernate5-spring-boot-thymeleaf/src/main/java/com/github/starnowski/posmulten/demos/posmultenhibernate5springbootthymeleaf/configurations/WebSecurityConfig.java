@@ -48,7 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/app/*/j_spring_security_check").permitAll()
                 .antMatchers("/app/*/posts").hasAnyRole("AUTHOR", "ADMIN")
                 //TODO
-                .antMatchers("/app/*/assessments").hasAnyRole("AUTHOR", "ADMIN")
+                .antMatchers("/app/*/posts").hasAnyRole("AUTHOR", "ADMIN")
                 .antMatchers("/app/*/config").hasRole("ADMIN")
                 .antMatchers("/app/**").authenticated()
                 .and().formLogin().loginProcessingUrl("/app/*/j_spring_security_check")
@@ -117,8 +117,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(tenantFilter());
         registration.setEnabled(true);
-        registration.addUrlPatterns("/assessments");
-        registration.addUrlPatterns("/assessments/*");
+        registration.addUrlPatterns("/posts");
+        registration.addUrlPatterns("/posts/*");
         registration.addUrlPatterns("/users");
         registration.addUrlPatterns("/users/*");
         registration.setOrder(1);
