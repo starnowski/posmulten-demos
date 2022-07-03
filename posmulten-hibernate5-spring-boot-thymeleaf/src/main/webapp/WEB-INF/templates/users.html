@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<!-- Insert content into the layouts/layout.html -->
+<th:block layout:fragment="content">
+    <div class="userslist" >
+
+        <h2 th:text="#{title.list}">List of Users</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{seedstarter.datePlanted}">Name</th>
+                <th th:text="#{seedstarter.covered}">User ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="us : ${allUsers}">
+                <td th:text="${{us.username}}">John Doe</td>
+                <td th:text="${{us.userId}}">007-XXXX-YYY</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</th:block>
+</body>
+</html>
