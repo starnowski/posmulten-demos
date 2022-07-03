@@ -8,7 +8,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
@@ -31,6 +34,11 @@ public class UserService {
     public UserDto read(UUID userId) {
         User user = userRepository.findById(userId).get();
         return new UserDto().setUsername(user.getUsername()).setUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream().map(user -> new UserDto().setUsername(user.getUsername()).setUserId(user.getUserId())).collect(toList());
     }
 
 }
