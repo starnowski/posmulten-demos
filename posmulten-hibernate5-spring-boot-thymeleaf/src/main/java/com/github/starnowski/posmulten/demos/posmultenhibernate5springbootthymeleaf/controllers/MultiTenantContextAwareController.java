@@ -45,9 +45,9 @@ public class MultiTenantContextAwareController {
     }
 
     @GetMapping(value = {"/posts"})
-    public String getAssessments(
+    public String getPosts(
             @PathVariable("domain") String domain, Model model) {
-        log.debug("String getAssessments()");
+        log.debug("String getPosts()");
         model.addAttribute("domainPrefix", "/app/" + domain);
         return "posts";
     }
