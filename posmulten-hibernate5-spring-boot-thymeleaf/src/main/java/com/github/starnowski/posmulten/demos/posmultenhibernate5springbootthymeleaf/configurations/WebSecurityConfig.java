@@ -2,6 +2,7 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters.*;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainAwareSavedRequestAwareAuthenticationSuccessHandler;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLoginUrlAuthenticationEntryPoint;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainUrlAuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,10 +53,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/app/*/config").hasRole("ADMIN") // TODO No such resource yet
                 .antMatchers("/app/*/users").hasRole("ADMIN")
                 .antMatchers("/app/**").authenticated()
-                .and().formLogin().loginProcessingUrl("/app/*/j_spring_security_check")
-                .failureHandler(domainUrlAuthenticationFailureHandler())
-                .permitAll()
-                .and().exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
+                .and()
+                .formLogin().loginProcessingUrl("/app/*/j_spring_security_check")
+                    .successHandler(domainAwareSavedRequestAwareAuthenticationSuccessHandler())
+                    .failureHandler(domainUrlAuthenticationFailureHandler())
+                    .permitAll()
+                .and()
+                .logout()
+                    .logoutSuccessUrl("/welcome")
+                    .and()
+                .exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(correctTenantContextFilter(), SecurityContextPersistenceFilter.class);
     }
@@ -166,5 +173,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationFailureHandler domainUrlAuthenticationFailureHandler() {
         return new DomainUrlAuthenticationFailureHandler("/login?error", "/app/" + DomainUrlAuthenticationFailureHandler.DOMAIN_URL_PART + "/login?error", domainResolver());
+    }
+
+    @Bean
+    public DomainAwareSavedRequestAwareAuthenticationSuccessHandler domainAwareSavedRequestAwareAuthenticationSuccessHandler() {
+        return new DomainAwareSavedRequestAwareAuthenticationSuccessHandler("/app/" + DomainAwareSavedRequestAwareAuthenticationSuccessHandler.DOMAIN_URL_PART + "/");
     }
 }
