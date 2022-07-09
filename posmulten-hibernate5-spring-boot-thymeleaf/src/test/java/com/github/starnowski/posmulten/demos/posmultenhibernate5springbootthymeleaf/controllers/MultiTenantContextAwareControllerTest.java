@@ -53,6 +53,8 @@ public class MultiTenantContextAwareControllerTest {
         System.out.println("encrypted password:" + bCryptPasswordEncoder.encode("pass"));
         webClient.getCookieManager().clearCookies();
         webClient.getCookieManager().setCookiesEnabled(true);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
     }
 
     @org.junit.jupiter.api.Test
