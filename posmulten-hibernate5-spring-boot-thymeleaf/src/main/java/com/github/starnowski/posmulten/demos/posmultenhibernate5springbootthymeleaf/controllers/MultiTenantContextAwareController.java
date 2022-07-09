@@ -1,6 +1,8 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers;
 
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.PostService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/app/{domain}")
 public class MultiTenantContextAwareController {
+
+    @Autowired
+    private PostService postService;
 
     @GetMapping(value = {"/login"})
     public String getLogin(
@@ -49,6 +54,7 @@ public class MultiTenantContextAwareController {
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getPosts()");
         model.addAttribute("domainPrefix", "/app/" + domain);
+        model.addAttribute("allPosts", postService.getAllPosts());
         return "posts";
     }
     //config-page
