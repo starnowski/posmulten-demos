@@ -287,4 +287,14 @@ public class MultiTenantContextAwareControllerTest {
         assertThat(htmlPage.getWebResponse().getContentAsString()).contains(expectedHtmlTextPart);
     }
 
+
+    private void assertHttpResourceIsAvailableForCurrentLoggedUserAndDoesNotDisplayExpectedContent(String resourcePath, String expectedHtmlTextPart) throws IOException {
+        // when
+        final HtmlPage htmlPage = this.webClient.getPage(resourcePath);
+
+        // then
+        assertThat(htmlPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
+        assertThat(htmlPage.getWebResponse().getContentAsString()).doesNotContain(expectedHtmlTextPart);
+    }
+
 }
