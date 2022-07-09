@@ -7,6 +7,9 @@ import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +20,13 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
+import java.util.stream.Stream;
 
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.OwnerDataSourceConfiguration.OWNER_DATA_SOURCE;
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.OwnerDataSourceConfiguration.OWNER_TRANSACTION_MANAGER;
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -38,6 +41,24 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
         config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
         executionPhase = AFTER_TEST_METHOD)
 public class MultiTenantContextAwareControllerTest {
+
+    private static Stream<Arguments> provideLoggedUserAndExpectedVisiblePost() {
+        return Stream.of(
+                Arguments.of("polish.dude.eu", "starnowski", "First post in application for xds1"),
+                Arguments.of("polish.dude.eu", "dude", "Second post in application for xds1"),
+                Arguments.of("my.doc.com", "dude", "Post post and post"),
+                Arguments.of("my.doc.com", "starnowski", "This is a text content")
+        );
+    }
+
+    private static Stream<Arguments> provideLoggedUserAndExpectedNoneVisiblePost() {
+        return Stream.of(
+                Arguments.of("polish.dude.eu", "starnowski", "Post post and post"),
+                Arguments.of("polish.dude.eu", "dude", "This is a text content"),
+                Arguments.of("my.doc.com", "dude", "First post in application for xds1"),
+                Arguments.of("my.doc.com", "starnowski", "Second post in application for xds1")
+        );
+    }
 
     @Autowired
     WebClient webClient;
@@ -251,6 +272,26 @@ public class MultiTenantContextAwareControllerTest {
         // a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15");
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/users", "dude");
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideLoggedUserAndExpectedVisiblePost")
+    public void shouldDisplayPostWithExpectedText(String domain, String user, String  expectedText) throws IOException {
+        // when
+        loginUserForDomain(user, domain);
+
+        // then
+        assertHttpResourceIsAvailableForCurrentLoggedUser("/app/" + domain + "/posts", expectedText);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideLoggedUserAndExpectedNoneVisiblePost")
+    public void shouldDisplayPostButWithoutExpectedText(String domain, String user, String  expectedText) throws IOException {
+        // when
+        loginUserForDomain(user, domain);
+
+        // then
+        assertHttpResourceIsAvailableForCurrentLoggedUserAndDoesNotDisplayExpectedContent("/app/" + domain + "/posts", expectedText);
     }
 
     //TODO Addedd test with ACL test cases
