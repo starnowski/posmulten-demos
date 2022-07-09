@@ -98,6 +98,15 @@
             <version>${webjars.webjars-locator.version}</version>
         </dependency>
 
+
+        <!-- object mappings -->
+        <!-- https://www.baeldung.com/mapstruct  -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.4.2.Final</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
