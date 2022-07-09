@@ -14,6 +14,9 @@ INSERT INTO user_info (user_id, username, tenant_id, password) VALUES ('a0eebc99
 INSERT INTO user_role (id, role, user_id, tenant_id) VALUES (nextval( 'hibernate_sequence' ), 'ADMIN', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14', 'xds1'); -- starnowski as ADMIN
 INSERT INTO user_role (id, role, user_id, tenant_id) VALUES (nextval( 'hibernate_sequence' ), 'AUTHOR', 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'xds1'); -- dude as AUTHOR
 
+INSERT INTO posts (id, userId, text) VALUES (nextval( 'hibernate_sequence' ), 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'First post in application');
+INSERT INTO posts (id, userId, text) VALUES (nextval( 'hibernate_sequence' ), 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15', 'Second post in application');
+
 --- tenant_info
 INSERT INTO tenant_info (tenant_id, domain) VALUES ('xds', 'my.doc.com');
 INSERT INTO tenant_info (tenant_id, domain) VALUES ('xds1', 'polish.dude.eu');
