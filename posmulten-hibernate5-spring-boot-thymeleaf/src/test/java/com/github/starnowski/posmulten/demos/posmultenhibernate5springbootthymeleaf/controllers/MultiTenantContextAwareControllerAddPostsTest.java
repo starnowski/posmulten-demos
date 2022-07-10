@@ -124,6 +124,7 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
         //then
         assertThat(currentPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
         assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/posts");
+        assertThat(currentPage.getWebResponse().getContentAsString()).contains(POST_CONTENT);
     }
 
     @Order(10)
