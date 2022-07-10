@@ -33,6 +33,8 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MultiTenantContextAwareControllerAddPostsTest extends AbstractControllerTest{
 
+    private static final String POST_CONTENT = "This is totally new post";
+
     @Autowired
     WebClient webClient;
 
@@ -106,6 +108,22 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
         //then
         assertThat(currentPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
         assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/add-posts/");
+    }
+
+    @Order(5)
+    @org.junit.jupiter.api.Test
+    public void shouldSubmitNewPostAndRedirectToPostList() throws Exception {
+        // given
+        HtmlForm form = currentPage.getFormByName("newPostForm");
+        form.getInputByName("text").setValueAttribute(POST_CONTENT);
+        HtmlButton submitButton = form.getButtonByName("submitPost");
+
+        // when
+        currentPage = submitButton.click();
+
+        //then
+        assertThat(currentPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
+        assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/posts");
     }
 
     @Order(10)
