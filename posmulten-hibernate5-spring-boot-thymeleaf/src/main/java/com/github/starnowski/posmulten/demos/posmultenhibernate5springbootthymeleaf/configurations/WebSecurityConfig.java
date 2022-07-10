@@ -47,11 +47,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/app/*/login").permitAll()
                 .antMatchers("/app/*/j_spring_security_check").permitAll()
-                .antMatchers("/app/*/posts").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
+                .antMatchers("/app/*/posts", "/app/*/posts/").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
 //                .antMatchers("/app/*/add-posts").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
-                //TODO
-                .antMatchers("/app/*/config").hasRole("ADMIN") // TODO No such resource yet
-                .antMatchers("/app/*/users").hasRole("ADMIN")
+                .antMatchers("/app/*/config", "/app/*/config/").hasRole("ADMIN") // TODO No such resource yet
+                .antMatchers("/app/*/users", "/app/*/users/").hasRole("ADMIN")
                 .antMatchers("/app/**").authenticated()
                 .and()
                 .formLogin().loginProcessingUrl("/app/*/j_spring_security_check")

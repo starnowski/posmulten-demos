@@ -215,7 +215,9 @@ public class MultiTenantContextAwareControllerTest extends AbstractControllerTes
         // then
         assertHttpResourceIsAvailableForCurrentLoggedUser("/app/polish.dude.eu/hello", "Hello World!");
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/posts");
+        assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/posts/");
         assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config");
+        assertHttpResourceIsForbiddenForCurrentLoggedUser("/app/polish.dude.eu/config/");
     }
 
     @org.junit.jupiter.api.Test
