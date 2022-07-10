@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public class TenantUser extends User {
 
@@ -11,16 +12,19 @@ public class TenantUser extends User {
 
     private String tenantId;
 
-    public TenantUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String tenantId) {
+    private UUID userId;
+
+    public TenantUser(String username, String password, Collection<? extends GrantedAuthority> authorities, String tenantId, UUID userId) {
         super(username, password, authorities);
         this.tenantId = tenantId;
+        this.userId = userId;
     }
 
     public String getTenantId() {
         return tenantId;
     }
 
-    public void setTenantId(String tenantId) {
-        this.tenantId = tenantId;
+    public UUID getUserId() {
+        return userId;
     }
 }

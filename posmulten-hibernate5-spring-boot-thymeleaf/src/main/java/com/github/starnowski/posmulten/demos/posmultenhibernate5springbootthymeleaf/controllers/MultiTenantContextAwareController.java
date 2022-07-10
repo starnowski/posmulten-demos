@@ -1,13 +1,19 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers;
 
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto.PostDto;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto.UserDto;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.forms.PostForm;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.PostService;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.SecurityServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Slf4j
 @Controller
@@ -16,6 +22,8 @@ public class MultiTenantContextAwareController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private SecurityServiceImpl securityService;
 
     @GetMapping(value = {"/login"})
     public String getLogin(
@@ -63,7 +71,15 @@ public class MultiTenantContextAwareController {
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getPosts()");
         model.addAttribute("domainPrefix", "/app/" + domain);
+        model.addAttribute("postFrom", new PostForm());
         return "add-posts";
+    }
+
+    @PostMapping(value = {"/add-posts"})
+    public RedirectView createPost(
+            PostForm postForm) {
+        postService.create(new PostDto().setText(postForm.getText()).setAuthor(new UserDto().setUserId(securityService.findLoggedInTenantUser().getUserId())));
+        return new RedirectView("/posts");
     }
     //config-page
 }
