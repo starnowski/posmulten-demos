@@ -36,7 +36,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
         config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
         executionPhase = AFTER_TEST_METHOD)
-public class MultiTenantContextAwareControllerAddPostsTest {
+public class MultiTenantContextAwareControllerAddPostsTest extends AbstractControllerTest{
 
     @Autowired
     WebClient webClient;
@@ -254,36 +254,9 @@ public class MultiTenantContextAwareControllerAddPostsTest {
 
     //TODO Addedd test with ACL test cases
 
-    private void loginUserForDomain(String username, String domain) throws IOException {
-        HtmlPage loginPage = this.webClient.getPage("/app/" + domain + "/home");
-        HtmlForm resendForm = loginPage.getFormByName("loginForm");
-        final HtmlTextInput usernameField = resendForm.getInputByName("username");
-        final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
-        final HtmlButton sendButton = resendForm.getButtonByName("subButton");
-
-        usernameField.setValueAttribute(username);
-        passwordField.setValueAttribute("pass");
-        sendButton.click();
-    }
-
-    private void assertHttpResourceIsForbiddenForCurrentLoggedUser(String resourcePath) throws IOException {
-        // when
-        try {
-            this.webClient.getPage(resourcePath);
-            Assertions.fail("Response should contains 403 status");
-        } catch (FailingHttpStatusCodeException exception) {
-            // then
-            assertThat(exception.getStatusCode()).isEqualTo(FORBIDDEN.value());
-        }
-    }
-
-    private void assertHttpResourceIsAvailableForCurrentLoggedUser(String resourcePath, String expectedHtmlTextPart) throws IOException {
-        // when
-        final HtmlPage htmlPage = this.webClient.getPage(resourcePath);
-
-        // then
-        assertThat(htmlPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
-        assertThat(htmlPage.getWebResponse().getContentAsString()).contains(expectedHtmlTextPart);
+    @Override
+    protected WebClient getWebClient() {
+        return webClient;
     }
 
 }
