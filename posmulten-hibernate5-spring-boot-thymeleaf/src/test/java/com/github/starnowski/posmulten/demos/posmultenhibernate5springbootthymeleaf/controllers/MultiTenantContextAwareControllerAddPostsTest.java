@@ -94,6 +94,20 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
         assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/posts");
     }
 
+    @Order(4)
+    @org.junit.jupiter.api.Test
+    public void shouldRedirectUserToPostForm() throws Exception {
+        // given
+        HtmlAnchor anchor = currentPage.getAnchorByName("redirectToPostForm");
+
+        // when
+        currentPage = anchor.click();
+
+        //then
+        assertThat(currentPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
+        assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/add-posts");
+    }
+
     @Order(10)
     @Sql(value = CLEAR_DATABASE_SCRIPT_PATH,
             config = @SqlConfig(transactionMode = ISOLATED, dataSource = OWNER_DATA_SOURCE, transactionManager = OWNER_TRANSACTION_MANAGER),
@@ -101,7 +115,7 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
     @org.junit.jupiter.api.Test
     public void dropData()
     {
-
+        // Do nothing
     }
 
     //TODO Addedd test with ACL test cases
