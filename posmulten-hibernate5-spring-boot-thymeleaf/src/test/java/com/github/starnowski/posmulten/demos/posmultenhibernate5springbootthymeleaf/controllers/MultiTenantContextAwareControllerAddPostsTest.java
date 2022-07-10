@@ -2,9 +2,10 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MultiTenantContextAwareControllerAddPostsTest extends AbstractControllerTest{
 
     @Autowired
@@ -39,6 +41,8 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    private HtmlPage currentPage;
 
     @Order(1)
     @Sql(value = {CLEAR_DATABASE_SCRIPT_PATH, MULTI_TENANT_CONTEXT_AWARE_CONTROLLER_TEST_SCRIPT_PATH},
@@ -54,18 +58,40 @@ public class MultiTenantContextAwareControllerAddPostsTest extends AbstractContr
 
     @Order(2)
     @org.junit.jupiter.api.Test
-    public void shouldLoginAsUserWithRoleAuthor() throws Exception {
+    public void shouldRedirectToLoginPageForExistingDomain() throws Exception {
         // given
-        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds' and domain = 'my.doc.com'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'polish.dude.eu'")).isEqualTo(1);
 
         // when
-        HtmlPage homePage = this.webClient.getPage("/app/my.doc.com/home");
-        WebResponse response = homePage.getWebResponse();
+        currentPage = this.webClient.getPage("/app/polish.dude.eu/posts");
+        WebResponse response = currentPage.getWebResponse();
         int responseStatus = response.getStatusCode();
 
         // then
         assertThat(responseStatus).isEqualTo(OK.value());
-        assertThat(response.getWebRequest().getUrl().getPath()).isEqualTo("/app/my.doc.com/login");
+        assertThat(response.getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/login");
+    }
+
+    @Order(3)
+    @org.junit.jupiter.api.Test
+    public void shouldLoginAsUserWithRoleAuthor() throws Exception {
+        // given
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "tenant_info", "tenant_id = 'xds1' and domain = 'polish.dude.eu'")).isEqualTo(1);
+        assertThat(countNumberOfRecordsWhere(jdbcTemplate, "user_info", "tenant_id = 'xds1' and username = 'dude'")).isEqualTo(1);
+
+        HtmlForm resendForm = currentPage.getFormByName("loginForm");
+        final HtmlTextInput usernameField = resendForm.getInputByName("username");
+        final HtmlPasswordInput passwordField = resendForm.getInputByName("password");
+        final HtmlButton sendButton = resendForm.getButtonByName("subButton");
+
+        // when
+        usernameField.setValueAttribute("dude");
+        passwordField.setValueAttribute("pass");
+        currentPage = sendButton.click();
+
+        //then
+        assertThat(currentPage.getWebResponse().getStatusCode()).isEqualTo(OK.value());
+        assertThat(currentPage.getWebResponse().getWebRequest().getUrl().getPath()).isEqualTo("/app/polish.dude.eu/posts");
     }
 
     @Order(10)
