@@ -57,5 +57,13 @@ public class MultiTenantContextAwareController {
         model.addAttribute("allPosts", postService.getAllPosts());
         return "posts";
     }
+
+    @GetMapping(value = {"/add-posts"})
+    public String getAddPosts(
+            @PathVariable("domain") String domain, Model model) {
+        log.debug("String getPosts()");
+        model.addAttribute("domainPrefix", "/app/" + domain);
+        return "add-posts";
+    }
     //config-page
 }

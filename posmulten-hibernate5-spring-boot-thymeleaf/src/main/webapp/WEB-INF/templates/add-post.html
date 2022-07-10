@@ -12,20 +12,7 @@
 <body>
 <!-- Insert content into the layouts/layout.html -->
 <section layout:fragment="content">
-    Page for posts!
-</section>
-</body>
-
-</html>
-
-
-
-
-
-<div>
-
-    <h2 th:text="#{title.new}">Add new Seed Starter</h2>
-
+    Add post
     <form action="#" th:action="@{/seedstartermng}" th:object="${seedStarter}" method="post">
 
         <fieldset>
@@ -106,7 +93,7 @@
         </fieldset>
 
     </form>
+</section>
+</body>
 
-</div>
-
-
+</html>
