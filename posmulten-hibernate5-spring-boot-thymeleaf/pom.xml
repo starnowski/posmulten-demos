@@ -25,9 +25,9 @@
         <assertj.version>3.19.0</assertj.version>
 
         <!-- WebJars -->
-        <webjars.bootstrap.version>3.3.7</webjars.bootstrap.version>
-        <webjars.jquery.version>3.2.1</webjars.jquery.version>
-        <webjars.webjars-locator.version>0.40</webjars.webjars-locator.version>
+        <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
+        <webjars.jquery.version>3.6.0</webjars.jquery.version>
+        <webjars.webjars-locator.version>0.45</webjars.webjars-locator.version>
         <com.github.starnowski.posmulten.hibernate.version>0.1.1</com.github.starnowski.posmulten.hibernate.version>
     </properties>
 
