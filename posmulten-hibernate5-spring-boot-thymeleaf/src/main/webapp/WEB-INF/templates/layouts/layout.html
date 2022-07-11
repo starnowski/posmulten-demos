@@ -32,6 +32,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" th:href="@{/app/{domain}/users/(domain=${domain})}">users</a>
                 </li>
+                <li><form name="logoutForm" th:action="@{/app/{domain}/logout(domain=${domain})}" method="post"><input name="logoutButton" type="submit" value="Logout" class="btn btn-default" /></form></li>
             </ul>
         </div>
     </nav>

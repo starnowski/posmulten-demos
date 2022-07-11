@@ -4,6 +4,7 @@ import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainAwareSavedRequestAwareAuthenticationSuccessHandler;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLoginUrlAuthenticationEntryPoint;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLogoutSuccessHandler;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainUrlAuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -46,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/app/*/login").permitAll()
+                .antMatchers("/app/*/logout").permitAll()
                 .antMatchers("/app/*/j_spring_security_check").permitAll()
                 .antMatchers("/app/*/posts", "/app/*/posts/").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
 //                .antMatchers("/app/*/add-posts").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
@@ -59,7 +61,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                 .logout()
-                    .logoutSuccessUrl("/welcome")
+                    .logoutUrl("/app/*/logout")
+//                .logoutRequestMatcher("/app/*/logout")
+                    .logoutSuccessHandler(domainLogoutSuccessHandler())
+//                    .logoutSuccessUrl("/welcome")
                     .and()
                 .exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -177,5 +182,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public DomainAwareSavedRequestAwareAuthenticationSuccessHandler domainAwareSavedRequestAwareAuthenticationSuccessHandler() {
         return new DomainAwareSavedRequestAwareAuthenticationSuccessHandler("/app/" + DomainAwareSavedRequestAwareAuthenticationSuccessHandler.DOMAIN_URL_PART + "/");
+    }
+
+    @Bean
+    public DomainLogoutSuccessHandler domainLogoutSuccessHandler()
+    {
+        return new DomainLogoutSuccessHandler("/app/" + DomainLogoutSuccessHandler.DOMAIN_URL_PART + "/login");
     }
 }
