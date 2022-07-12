@@ -78,5 +78,4 @@ public class MultiTenantContextAwareController {
         postService.create(new PostDto().setText(postForm.getText()).setAuthor(new UserDto().setUserId(securityService.findLoggedInTenantUser().getUserId())));
         return new RedirectView("/app/{domain}/posts");
     }
-    //config-page
 }
