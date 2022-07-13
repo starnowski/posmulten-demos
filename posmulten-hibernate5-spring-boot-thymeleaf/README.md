@@ -40,3 +40,5 @@ After filling a database with data, we can start the application via running mav
 ```bash
 mvn spring-boot:run
 ```
+
+Quick note, we can also start application via our favorite idea like Intellij or Eclipse, Netbeans!
