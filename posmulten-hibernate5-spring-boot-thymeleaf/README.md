@@ -44,4 +44,42 @@ mvn spring-boot:run
 
 Quick note, we can also start applications via our favorite ide like Intellij or Eclipse, Netbeans!
 
+## Login to application
 
+TODO
+
+## Checking users list
+
+TODO
+
+## Adding post
+
+TODO
+
+## Login to different domain
+
+TODO
+
+## Displaying post for different domain
+
+TODO
+
+# Code overview
+
+TODO
+
+## Hibernate configurations
+
+TODO
+
+### Main configuration
+
+TODO
+
+### Test configuration
+
+TODO
+
+## Http filters
+
+TODO
