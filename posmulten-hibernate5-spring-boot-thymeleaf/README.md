@@ -5,6 +5,7 @@
 * [How to build project](#how-to-build-project)
 * [Fill database with data](#fill-database-with-data)
 * [Run application](#run-application)
+    ** [Login to application](#login-to-application)
 
 ## Introduction
 Project is simple application with users that posts text content. 
@@ -53,7 +54,7 @@ So let's log in to polish.dude.eu domain with user 'starnowski'. All users from 
   <img src="images/01_login.PNG">
 </p>
 
-TODO
+Note, the CSS style can be harsh, but the UI part is not the most important thing for this demo.
 
 ## Checking users list
 
