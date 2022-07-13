@@ -72,7 +72,17 @@ Checking current list of posts
   <img src="images/03_list_of_posts.PNG">
 </p>
 
-TODO
+Adding new post for demo purpose
+
+<p align="center">
+  <img src="images/04_add_posts.PNG">
+</p>
+
+Checking if post were added to list
+
+<p align="center">
+  <img src="images/05_list_of_posts.PNG">
+</p>
 
 ## Login to different domain
 
