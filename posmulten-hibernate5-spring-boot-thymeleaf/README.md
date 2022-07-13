@@ -86,7 +86,10 @@ Checking if post were added to list
 
 ## Login to different domain
 
-TODO
+Lets try to log in to different domain
+<p align="center">
+  <img src="images/06_login_to_different_domain.PNG">
+</p>
 
 ## Displaying post for different domain
 
