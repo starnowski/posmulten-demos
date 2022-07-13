@@ -4,6 +4,7 @@
 * [How to prepare database](#how-to-prepare-database)
 * [How to build project](#how-to-build-project)
 * [Fill database with data](#fill-database-with-data)
+* [Run application](#run-application)
 
 ## Introduction
 Project is simple application with users that posts text content. 
@@ -41,4 +42,6 @@ After filling a database with data, we can start the application via running mav
 mvn spring-boot:run
 ```
 
-Quick note, we can also start application via our favorite idea like Intellij or Eclipse, Netbeans!
+Quick note, we can also start applications via our favorite ide like Intellij or Eclipse, Netbeans!
+
+
