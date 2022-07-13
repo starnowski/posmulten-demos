@@ -58,9 +58,19 @@ Note, the CSS style can be harsh, but the UI part is not the most important thin
 
 ## Checking users list
 
-TODO
+As a user with admin role we can check list of users 
+
+<p align="center">
+  <img src="images/02_list_of_users.PNG">
+</p>
 
 ## Adding post
+
+Checking current list of posts
+
+<p align="center">
+  <img src="images/03_list_of_posts.PNG">
+</p>
 
 TODO
 
