@@ -46,6 +46,13 @@ Quick note, we can also start applications via our favorite ide like Intellij or
 
 ## Login to application
 
+Assuming that we used MultiTenantContextAwareControllerTest-script.sql file then we should available to log in with users from domains my.doc.com and polish.dude.eu.
+So let's log in to polish.dude.eu domain with user 'starnowski'. All users from MultiTenantContextAwareControllerTest-script.sql have password 'pass'.
+
+<p align="center">
+  <img src="images/01_login.PNG">
+</p>
+
 TODO
 
 ## Checking users list
