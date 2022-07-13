@@ -87,13 +87,19 @@ Checking if post were added to list
 ## Login to different domain
 
 Lets try to log in to different domain
+
 <p align="center">
   <img src="images/06_login_to_different_domain.PNG">
 </p>
 
 ## Displaying post for different domain
 
-TODO
+Checking posts for the domain.
+We can observe that posts for the first domain are not being displayed.
+
+<p align="center">
+  <img src="images/07_display_posts_for_different_domain.PNG">
+</p>
 
 # Code overview
 
