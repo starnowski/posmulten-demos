@@ -10,6 +10,11 @@
    * [Adding post](#adding-post)
    * [Login to different domain](#login-to-different-domain)
    * [Displaying post for different domain](#displaying-post-for-different-domain)
+* [Code overview](#code-overview)
+   * [Hibernate configurations](#hibernate-configurations)
+       * [Main configuration](#main-configuration)
+       * [Test configuration](#test-configuration)
+   * [Http filters](#http-filters)
 
 ## Introduction
 Project is simple application with users that posts text content. 
