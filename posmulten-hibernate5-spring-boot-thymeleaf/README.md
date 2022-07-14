@@ -122,6 +122,7 @@ Packages like:
 - com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model
 - com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories
 - com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security
 - com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers
 
 contains mostly business logic. 
@@ -131,6 +132,8 @@ All configurations are being stored in com.github.starnowski.posmulten.demos.pos
 What is interesting from a developer standpoint are two configurations, [PrimaryDataSourceConfiguration](#main-configuration), and [OwnerDataSourceConfiguration](#test-configuration) (this one in tests resources).
 It is also recommended to check the WebSecurityConfig configuration. To find out how filters are defined, and in what order.
 Or how handlers for login and logout were added. No to mention request matcher patterns. 
+
+The Http filters are stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters package.
 
 TODO
 
