@@ -113,7 +113,7 @@ We can observe that posts for the first domain are not being displayed.
 
 # Code overview
 
-That are some things in the code which developer 
+As for things in the code that might be interesting from the developers' perspective.
 Packages like:
 
 - com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto
