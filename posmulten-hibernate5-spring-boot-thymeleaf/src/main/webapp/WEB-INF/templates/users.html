@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+<!-- Insert content into the layouts/layout.html -->
+<th:block layout:fragment="content">
+    <div class="userslist" >
+
+        <h2 th:text="#{users.title}">List of Users</h2>
+
+        <table>
+            <thead>
+            <tr>
+                <th th:text="#{users.name}">Name</th>
+                <th th:text="#{users.userid}">User ID</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="us : ${allUsers}">
+                <td th:text="${{us.username}}">John Doe</td>
+                <td th:text="${{us.userId}}">007-XXXX-YYY</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <a class="btn btn-outline-dark" th:href="@{/app/{domain}/add-users/(domain=${domain})}" role="button" name="redirectToUsersForm">Add user</a>
+</th:block>
+</body>
+</html>
