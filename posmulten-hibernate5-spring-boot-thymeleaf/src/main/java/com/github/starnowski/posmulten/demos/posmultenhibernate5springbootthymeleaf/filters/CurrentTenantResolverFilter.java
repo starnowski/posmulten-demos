@@ -13,6 +13,9 @@ import java.io.IOException;
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser.ROOT_TENANT_ID;
 import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext.setCurrentTenant;
 
+/**
+ * Filter that set correct tenant identifier based on domain part in URL.
+ */
 public class CurrentTenantResolverFilter implements Filter {
 
     @Autowired

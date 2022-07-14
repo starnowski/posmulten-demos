@@ -16,6 +16,14 @@ import java.io.IOException;
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser.ROOT_TENANT_ID;
 import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext.setCurrentTenant;
 
+/**
+ * Filter that checks if authenticated user wants to get access to domain to which he belongs.
+ * If user domain and domain which he request is different that filter set http response with status 403
+ * For example when user log in in for domain "start1" - /app/start1/login
+ * - when user tries to get resource "/app/start1/posts" then filter does not do anything
+ * - when user tries to get resource "/app/stop2/posts" (different domain) then filter set response http response with status 403
+ *
+ */
 public class CorrectTenantContextFilter  implements Filter {
 
     @Autowired
