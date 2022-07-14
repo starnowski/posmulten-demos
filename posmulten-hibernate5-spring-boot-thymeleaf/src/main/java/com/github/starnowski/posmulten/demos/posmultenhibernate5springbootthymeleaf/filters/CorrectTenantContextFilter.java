@@ -3,7 +3,7 @@ package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthyme
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.TenantInfo;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.TenantInfoRepository;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser;
-import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.SecurityServiceImpl;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.SecurityServiceImpl;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

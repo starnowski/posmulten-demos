@@ -4,7 +4,7 @@ import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto.UserDto;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.forms.PostForm;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.PostService;
-import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services.SecurityServiceImpl;
+import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.SecurityServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

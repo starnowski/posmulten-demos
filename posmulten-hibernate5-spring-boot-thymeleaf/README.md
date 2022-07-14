@@ -104,6 +104,22 @@ We can observe that posts for the first domain are not being displayed.
 
 # Code overview
 
+That are some things in the code which developer 
+Packages like:
+
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.forms
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.mappers
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services
+- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers
+
+contains mostly business logic. 
+So maybe besides usage of com.github.starnowski.posmulten.hibernate.core.TenantTable annotation in the model package you would not see any things that you would not see in other Spring-boot projects.
+
+
+
 TODO
 
 ## Hibernate configurations

@@ -1,6 +1,5 @@
-package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services;
+package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security;
 
-import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
