@@ -22,7 +22,9 @@ The idea behind demo is that application use Multi-tenancy architecture with sha
 Which means that all tenants shares not only the same database but also schemas.
 In our example tenant is customer that has domain where his user posts text content.
 [Posmulten-hibernate](https://github.com/starnowski/posmulten-hibernate) library required of using Postgres as database engine.
-TODO Mention about isolation
+The main goal of this demo is to show the benefits of Multi-tenancy architecture with a shared schema strategy.
+How this architecture gives data isolation can reduce the enormous amount of code that developers would have to implement for authorization purposes.
+For instance, in the assumption that data for all tenants are stored in one database, the developer does not have to implement conditions in every SQL query to ensure that one tenant does not see data that belongs to other tenants.
 
 ## How to prepare database
 Project user Postgres database version. Minimum version is 9.6.
