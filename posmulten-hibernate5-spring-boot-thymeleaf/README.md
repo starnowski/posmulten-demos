@@ -133,9 +133,9 @@ What is interesting from a developer standpoint are two configurations, [Primary
 It is also recommended to check the WebSecurityConfig configuration. To find out how filters are defined, and in what order.
 Or how handlers for login and logout were added. No to mention request matcher patterns. 
 
-The Http filters are stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters package.
+The [Http filters](#http-filters) are stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters package.
 
-TODO
+As for com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util package, the DomainResolver class might worth to check.
 
 ## Hibernate configurations
 
