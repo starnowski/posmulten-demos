@@ -15,6 +15,9 @@ import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTena
 
 /**
  * Filter that set correct tenant identifier based on domain part in URL.
+ * For example if request is being set for resource "/app/some.domain/login" then filter tries to find out tenant that is related to domain "some.domain".
+ * If tenant exist then the filter sets tenant identifier.
+ * In other case the filter sets {@link com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser.ROOT_TENANT_ID}
  */
 public class CurrentTenantResolverFilter implements Filter {
 
