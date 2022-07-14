@@ -127,7 +127,8 @@ Packages like:
 contains mostly business logic. 
 So maybe besides usage of com.github.starnowski.posmulten.hibernate.core.TenantTable annotation in the model package you would not see any things that you would not see in other Spring-boot projects.
 
-
+All configurations are being stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations package.
+What is interesting from a developer standpoint are two configurations, PrimaryDataSourceConfiguration, and OwnerDataSourceConfiguration (this one in tests resources)
 
 TODO
 
