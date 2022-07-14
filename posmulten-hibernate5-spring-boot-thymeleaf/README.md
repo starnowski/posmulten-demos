@@ -139,13 +139,19 @@ As for com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 
 ## Hibernate configurations
 
-TODO
+One of the most important configuration types for this project is JPA configuration.
 
 ### Main configuration
 
-TODO
+The com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn sets primary database component that will be used in production code.
+As for database users, it can not be a user with an admin role from a Postgres database perspective.
+Posmulten-hibernate library requires of usage of the Row Level Security policy mechanism that does not work for database admin users.
 
 ### Test configuration
+
+The com.github.starnowski.posmulten.demos.posmultenhibernate5 springboot thymeleaf.configurations.OwnerDataSourceConfiguration configuration is design for tests purpose.
+It should exists in the same Spring context as com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn.
+Database user used by this configuration can be admin user or any other database that has priviliges to create function or add Row Level Security policies.
 
 TODO
 
