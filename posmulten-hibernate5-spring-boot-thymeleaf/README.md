@@ -153,8 +153,9 @@ The com.github.starnowski.posmulten.demos.posmultenhibernate5 springboot thymele
 It should exists in the same Spring context as com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn.
 Database user used by this configuration can be admin user or any other database that has priviliges to create function or add Row Level Security policies.
 
-TODO
-
 ## Http filters
 
-TODO
+The com.github.starnowski.posmulten.demos.posmultenhibernate5 springboot thymeleaf.configurations.filters configuration contains Http filters object.
+It is worth checking all of them, but the most important filter is CurrentTenantResolverFilter. 
+It is responsible for setting the correct tenant identifiers based on a domain that is part of the URL address.
+
