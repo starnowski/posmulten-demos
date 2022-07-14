@@ -6,6 +6,10 @@
 * [Fill database with data](#fill-database-with-data)
 * [Run application](#run-application)
    * [Login to application](#login-to-application)
+   * [Checking users list](#checking-users-list)
+   * [Adding post](#adding-post)
+   * [Login to different domain](#login-to-different-domain)
+   * [Displaying post for different domain](#displaying-post-for-different-domain)
 
 ## Introduction
 Project is simple application with users that posts text content. 
