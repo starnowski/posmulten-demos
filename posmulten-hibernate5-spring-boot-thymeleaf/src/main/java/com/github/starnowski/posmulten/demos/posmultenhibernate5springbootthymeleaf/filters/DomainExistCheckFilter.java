@@ -11,6 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * The filter checks if the domain passed as part URL does exist.
+ * The filter tries to find tenants based on domain.
+ * If the filter does not find a tenant, it sets an http response with a 404 status.
+ */
 public class DomainExistCheckFilter implements Filter {
 
     @Autowired
