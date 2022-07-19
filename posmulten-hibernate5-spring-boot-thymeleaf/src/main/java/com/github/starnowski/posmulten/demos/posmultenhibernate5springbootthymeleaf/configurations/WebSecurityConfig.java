@@ -165,8 +165,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public TenantFilter tenantFilter() {
-        return new TenantFilter();
+    public RequiredTenantFilter tenantFilter() {
+        return new RequiredTenantFilter();
     }
 
     @Bean
