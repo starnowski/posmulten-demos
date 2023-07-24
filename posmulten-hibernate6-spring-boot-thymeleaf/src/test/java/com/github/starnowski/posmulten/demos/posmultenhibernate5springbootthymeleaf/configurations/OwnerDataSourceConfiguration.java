@@ -1,14 +1,11 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations;
 
-import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator;
-import com.github.starnowski.posmulten.hibernate.core.context.DefaultSharedSchemaContextBuilderProviderInitiator;
-import com.github.starnowski.posmulten.hibernate.core.context.metadata.PosmultenUtilContextInitiator;
-import com.github.starnowski.posmulten.hibernate.core.schema.PosmultenSchemaManagementTool;
-import com.github.starnowski.posmulten.hibernate.core.schema.SchemaCreatorStrategyContextInitiator;
-import org.hibernate.MultiTenancyStrategy;
+import com.github.starnowski.posmulten.hibernate.hibernate6.context.SharedSchemaContextProviderInitiator;
+import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.Boolean.TRUE;
@@ -30,8 +28,9 @@ public class OwnerDataSourceConfiguration {
 
     public static final String OWNER_TRANSACTION_MANAGER = "ownerTransactionManager";
     public static final String OWNER_DATA_SOURCE = "ownerDataSource";
-    public static final String SET_CURRENT_TENANT_FUNCTION_NAME = "set_pos_demo_tenant";
-    public static final String TENANT_PROPERTY_NAME = "posdemo.tenant";
+
+    @Value("${spring.datasource.primary.username}")
+    private String grantee;
 
     @Bean(name = "ownerDataSourceProperties")
     @ConfigurationProperties("spring.datasource.owner")
@@ -56,12 +55,9 @@ public class OwnerDataSourceConfiguration {
         LocalSessionFactoryBuilder builder
                 = new LocalSessionFactoryBuilder(ownerDataSource);
         builder.getStandardServiceRegistryBuilder()
-                .addInitiator(new SchemaCreatorStrategyContextInitiator())
-                .addInitiator(new DefaultSharedSchemaContextBuilderProviderInitiator())
-                .addInitiator(new DefaultSharedSchemaContextBuilderMetadataEnricherProviderInitiator())
-                .addInitiator(new PosmultenUtilContextInitiator())
+                .addInitiator(new SharedSchemaContextProviderInitiator(this.getClass().getResource("/configuration.yaml").getPath(), DefaultDecoratorContext.builder()
+                        .withReplaceCharactersMap(Map.of("{{template_schema_value}}", "public", "{{template_user_grantee}}", grantee)).build()))
                 .applySettings(hibernateProperties())
-                // https://stackoverflow.com/questions/39064124/unknownunwraptypeexception-cannot-unwrap-to-requested-type-javax-sql-datasourc
                 .applySetting(Environment.DATASOURCE, ownerDataSource);
         builder.scanPackages("com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model");
         return builder.buildSessionFactory();
@@ -74,21 +70,13 @@ public class OwnerDataSourceConfiguration {
         hibernateProperties.setProperty(
                 "hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.setProperty(
-                Environment.MULTI_TENANT, MultiTenancyStrategy.NONE.name());
+                "hibernate.multiTenancy", "NONE");
         hibernateProperties.setProperty(
                 "hibernate.archive.autodetection", "class");
-        hibernateProperties.setProperty(
-                "hibernate.schema_management_tool", PosmultenSchemaManagementTool.class.getName());
         hibernateProperties.setProperty(
                 "hibernate.format_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 "hibernate.show_sql", TRUE.toString());
-        hibernateProperties.setProperty(
-                "hibernate.posmulten.grantee", "posmhib4sb-user");
-        hibernateProperties.setProperty(
-                com.github.starnowski.posmulten.hibernate.core.Properties.SET_CURRENT_TENANT_FUNCTION_NAME, SET_CURRENT_TENANT_FUNCTION_NAME);
-        hibernateProperties.setProperty(
-                com.github.starnowski.posmulten.hibernate.core.Properties.ID_PROPERTY, TENANT_PROPERTY_NAME);
         return hibernateProperties;
     }
 
