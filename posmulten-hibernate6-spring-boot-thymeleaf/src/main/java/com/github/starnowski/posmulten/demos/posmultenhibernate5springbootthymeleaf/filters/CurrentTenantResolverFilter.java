@@ -4,14 +4,15 @@ import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.TenantInfoRepository;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.SecurityServiceImpl;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.DomainResolver;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
+
 import java.io.IOException;
 
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security.TenantUser.ROOT_TENANT_ID;
-import static com.github.starnowski.posmulten.hibernate.core.context.CurrentTenantContext.setCurrentTenant;
+import static com.github.starnowski.posmulten.hibernate.common.context.CurrentTenantContext.setCurrentTenant;
 
 /**
  * Filter that set correct tenant identifier based on domain part in URL.
