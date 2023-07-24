@@ -1,7 +1,9 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations;
 
 import com.github.starnowski.posmulten.hibernate.common.context.CurrentTenantContext;
+import com.github.starnowski.posmulten.hibernate.hibernate6.CurrentTenantIdentifierResolverImpl;
 import com.github.starnowski.posmulten.hibernate.hibernate6.connection.SharedSchemaConnectionProviderInitiatorAdapter;
+import com.github.starnowski.posmulten.hibernate.hibernate6.connection.SharedSchemaMultiTenantConnectionProvider;
 import com.github.starnowski.posmulten.hibernate.hibernate6.context.SharedSchemaContextProviderInitiator;
 import com.github.starnowski.posmulten.postgresql.core.context.decorator.DefaultDecoratorContext;
 import org.apache.groovy.util.Maps;
@@ -81,9 +83,9 @@ public class PrimaryDataSourceConfiguration {
         hibernateProperties.setProperty(
                 "hibernate.multiTenancy", "SCHEMA");
         hibernateProperties.setProperty(
-                Environment.MULTI_TENANT_CONNECTION_PROVIDER, "com.github.starnowski.posmulten.hibernate.core.connections.SharedSchemaMultiTenantConnectionProvider");
+                Environment.MULTI_TENANT_CONNECTION_PROVIDER, SharedSchemaMultiTenantConnectionProvider.class.getName());
         hibernateProperties.setProperty(
-                Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, "com.github.starnowski.posmulten.hibernate.core.CurrentTenantIdentifierResolverImpl");
+                Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, CurrentTenantIdentifierResolverImpl.class.getName());
         hibernateProperties.setProperty(
                 "hibernate.archive.autodetection", "class");
         hibernateProperties.setProperty(
@@ -92,6 +94,8 @@ public class PrimaryDataSourceConfiguration {
                 "hibernate.show_sql", TRUE.toString());
         hibernateProperties.setProperty(
                 Environment.PERSISTENCE_UNIT_NAME, "pu");
+        hibernateProperties.setProperty(
+                "hibernate.connection.url", primaryDataSourceProperties().getUrl());
         return hibernateProperties;
     }
 
