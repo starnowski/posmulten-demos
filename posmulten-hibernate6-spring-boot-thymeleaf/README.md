@@ -161,3 +161,8 @@ The com.github.starnowski.posmulten.demos.posmultenhibernate5 springboot thymele
 It is worth checking all of them, but the most important filter is CurrentTenantResolverFilter. 
 It is responsible for setting the correct tenant identifiers based on a domain that is part of the URL address.
 
+
+
+### Links
+
+https://www.baeldung.com/spring-boot-3-spring-6-new
