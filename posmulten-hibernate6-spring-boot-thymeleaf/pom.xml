@@ -28,14 +28,14 @@
         <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
         <webjars.jquery.version>3.6.0</webjars.jquery.version>
         <webjars.webjars-locator.version>0.45</webjars.webjars-locator.version>
-        <com.github.starnowski.posmulten.hibernate.version>0.1.1</com.github.starnowski.posmulten.hibernate.version>
+        <com.github.starnowski.posmulten.hibernate.version>0.2.0</com.github.starnowski.posmulten.hibernate.version>
     </properties>
 
     <!-- Add typical dependencies for a web application -->
     <dependencies>
         <dependency>
             <groupId>com.github.starnowski.posmulten.hibernate</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>hibernate6</artifactId>
             <version>${com.github.starnowski.posmulten.hibernate.version}</version>
         </dependency>
         <dependency>
