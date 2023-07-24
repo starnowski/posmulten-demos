@@ -1,6 +1,7 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util;
 
-import javax.servlet.http.HttpServletRequest;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 public class DomainResolver {
 

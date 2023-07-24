@@ -166,3 +166,7 @@ It is responsible for setting the correct tenant identifiers based on a domain t
 ### Links
 
 https://www.baeldung.com/spring-boot-3-spring-6-new
+
+
+https://www.baeldung.com/spring-boot-3-migration
+

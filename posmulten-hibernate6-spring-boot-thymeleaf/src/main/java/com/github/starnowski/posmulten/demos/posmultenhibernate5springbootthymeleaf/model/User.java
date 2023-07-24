@@ -1,12 +1,11 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model;
 
-import com.github.starnowski.posmulten.hibernate.core.TenantTable;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Table(name = "user_info")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
-@TenantTable
 public class User {
 
     @Column(name = "tenant_id", insertable = false, updatable = false)

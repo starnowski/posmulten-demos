@@ -4,12 +4,12 @@ import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.mappers.PostMapper;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.Post;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.PostRepository;
+import jakarta.annotation.PostConstruct;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;

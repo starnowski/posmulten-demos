@@ -4,13 +4,13 @@ import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymel
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.mappers.UserMapper;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model.User;
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.UUID;
 

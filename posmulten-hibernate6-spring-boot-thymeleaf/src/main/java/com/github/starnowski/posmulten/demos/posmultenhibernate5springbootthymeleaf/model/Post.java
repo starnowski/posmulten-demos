@@ -1,12 +1,10 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model;
 
-import com.github.starnowski.posmulten.hibernate.core.TenantTable;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-
-import javax.persistence.*;
 
 @Data
 @Entity
@@ -14,7 +12,6 @@ import javax.persistence.*;
 @Table(name = "posts")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@TenantTable
 public class Post {
 
     @Id

@@ -1,13 +1,12 @@
 package com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model;
 
 import com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.RoleEnum;
-import com.github.starnowski.posmulten.hibernate.core.TenantTable;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 
 @Data
 @Entity
@@ -15,7 +14,6 @@ import javax.persistence.*;
 @Table(name = "user_role")
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-@TenantTable
 public class UserRole {
     @Id
     @GeneratedValue
