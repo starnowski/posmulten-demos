@@ -12,7 +12,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,13 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 import static com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.web.DomainLoginUrlAuthenticationEntryPoint.DOMAIN_URL_PART;
 
 
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -37,48 +35,32 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
+    @Bean
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests().antMatchers("/posts", "/posts/**", "/users", "/users/**", "/v2/api-docs", "/swagger-ui.html")
+        http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
+                .authorizeRequests().requestMatchers("/posts", "/posts/**", "/users", "/users/**", "/v2/api-docs", "/swagger-ui.html")
                 .permitAll()
                 .and()
-                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/app/*/login").permitAll()
-                .antMatchers("/app/*/logout").permitAll()
-                .antMatchers("/app/*/j_spring_security_check").permitAll()
-                .antMatchers("/app/*/posts", "/app/*/posts/").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
-//                .antMatchers("/app/*/add-posts").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
-                .antMatchers("/app/*/config", "/app/*/config/").hasRole("ADMIN") // TODO No such resource yet
-                .antMatchers("/app/*/users", "/app/*/users/").hasRole("ADMIN")
-                .antMatchers("/app/**").authenticated()
+                .requestMatchers("/app/*/login").permitAll()
+                .requestMatchers("/app/*/logout").permitAll()
+                .requestMatchers("/app/*/j_spring_security_check").permitAll()
+                .requestMatchers("/app/*/posts", "/app/*/posts/").hasAnyRole("AUTHOR", "ADMIN")//TODO Change to all authenticated
+                .requestMatchers("/app/*/config", "/app/*/config/").hasRole("ADMIN") // TODO No such resource yet
+                .requestMatchers("/app/*/users", "/app/*/users/").hasRole("ADMIN")
+                .requestMatchers("/app/**").authenticated()
                 .and()
-                .formLogin().loginProcessingUrl("/app/*/j_spring_security_check")
-                    .successHandler(domainAwareSavedRequestAwareAuthenticationSuccessHandler())
-                    .failureHandler(domainUrlAuthenticationFailureHandler())
-                    .permitAll()
-                .and()
-                .logout()
-                    .logoutUrl("/app/*/logout")
-//                .logoutRequestMatcher("/app/*/logout")
-                    .logoutSuccessHandler(domainLogoutSuccessHandler())
-//                    .logoutSuccessUrl("/welcome")
-                    .and()
-                .exceptionHandling().defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**"));
+                .formLogin(httpSecurityFormLoginConfigurer -> httpSecurityFormLoginConfigurer.loginProcessingUrl("/app/*/j_spring_security_check")
+                        .successHandler(domainAwareSavedRequestAwareAuthenticationSuccessHandler())
+                        .failureHandler(domainUrlAuthenticationFailureHandler()).permitAll())
+                .logout(httpSecurityLogoutConfigurer -> httpSecurityLogoutConfigurer.logoutUrl("/app/*/logout")
+                        .logoutSuccessHandler(domainLogoutSuccessHandler()))
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                        httpSecurityExceptionHandlingConfigurer.defaultAuthenticationEntryPointFor(domainLoginUrlAuthenticationEntryPoint(), new AntPathRequestMatcher("/app/**")))
+        ;
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(correctTenantContextFilter(), SecurityContextPersistenceFilter.class);
     }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
-    }
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-//    }
 
     @Bean
     public AuthenticationEntryPoint domainLoginUrlAuthenticationEntryPoint() {
@@ -184,8 +166,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DomainLogoutSuccessHandler domainLogoutSuccessHandler()
-    {
+    public DomainLogoutSuccessHandler domainLogoutSuccessHandler() {
         return new DomainLogoutSuccessHandler("/app/" + DomainLogoutSuccessHandler.DOMAIN_URL_PART + "/login");
     }
 }
