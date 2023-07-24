@@ -16,6 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
@@ -36,7 +37,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    protected void configure(HttpSecurity http) throws Exception {
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
                 .authorizeRequests().requestMatchers("/posts", "/posts/**", "/users", "/users/**", "/v2/api-docs", "/swagger-ui.html")
                 .permitAll()
@@ -60,6 +61,7 @@ public class WebSecurityConfig {
         ;
         http.addFilterBefore(currentTenantResolverFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(correctTenantContextFilter(), SecurityContextPersistenceFilter.class);
+        return http.build();
     }
 
     @Bean

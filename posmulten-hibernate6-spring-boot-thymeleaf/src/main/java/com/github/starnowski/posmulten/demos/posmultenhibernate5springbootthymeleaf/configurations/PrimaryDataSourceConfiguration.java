@@ -96,6 +96,10 @@ public class PrimaryDataSourceConfiguration {
                 Environment.PERSISTENCE_UNIT_NAME, "pu");
         hibernateProperties.setProperty(
                 "hibernate.connection.url", primaryDataSourceProperties().getUrl());
+        hibernateProperties.setProperty(
+                "hibernate.connection.username", primaryDataSourceProperties().getUsername());
+        hibernateProperties.setProperty(
+                "hibernate.connection.password", primaryDataSourceProperties().getPassword());
         return hibernateProperties;
     }
 
