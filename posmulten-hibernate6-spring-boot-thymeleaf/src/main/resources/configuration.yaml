@@ -2,7 +2,7 @@ default_schema: "{{template_schema_value}}"
 current_tenant_id_property_type:  "VARCHAR(255)"
 current_tenant_id_property: "pos.c.ten"
 get_current_tenant_id_function_name: "get_ten_id"
-set_current_tenant_id_function_name: "set_tenant"
+set_current_tenant_id_function_name: "set_pos_demo_tenant"
 equals_current_tenant_identifier_function_name: "equals_cur_tenant"
 tenant_has_authorities_function_name: "_tenant_hast_auth"
 force_row_level_security_for_table_owner: false
