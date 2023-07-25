@@ -63,7 +63,7 @@ public class MultiTenantContextAwareController {
         return "posts";
     }
 
-    @GetMapping(value = {"/add-posts"})
+    @GetMapping(value = {"/add-posts", "/add-posts/"})
     public String getAddPosts(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getPosts()");
@@ -72,7 +72,7 @@ public class MultiTenantContextAwareController {
         return "add-posts";
     }
 
-    @PostMapping(value = {"/add-posts"})
+    @PostMapping(value = {"/add-posts", "/add-posts/"})
     public RedirectView createPost(
             @ModelAttribute PostForm postForm) {
         postService.create(new PostDto().setText(postForm.getText()).setAuthor(new UserDto().setUserId(securityService.findLoggedInTenantUser().getUserId())));
