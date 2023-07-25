@@ -173,3 +173,8 @@ https://www.baeldung.com/spring-boot-3-migration
 https://spring.io/blog/2022/02/21/spring-security-without-the-websecurityconfigureradapter
 
 
+https://www.baeldung.com/htmlunit
+
+https://blogs.perficient.com/2021/06/17/aws-cost-analysis-comparing-lambda-ec2-fargate/
+https://blogs.perficient.com/2021/04/09/transitioning-your-infrastructure-to-architecture-as-code/
+
