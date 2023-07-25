@@ -178,3 +178,5 @@ https://www.baeldung.com/htmlunit
 https://blogs.perficient.com/2021/06/17/aws-cost-analysis-comparing-lambda-ec2-fargate/
 https://blogs.perficient.com/2021/04/09/transitioning-your-infrastructure-to-architecture-as-code/
 
+https://github.com/yuch7/cwlexec/issues/53
+//org.hibernate.HibernateException: The internal connection pool has reached its maximum size and no connection is currently available!

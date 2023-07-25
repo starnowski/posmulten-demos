@@ -28,7 +28,7 @@ public class MultiTenantContextAwareAdminController {
         return "users";
     }
 
-    @GetMapping(value = {"/app/{domain}/add-users"})
+    @GetMapping(value = {"/app/{domain}/add-users", "/app/{domain}/add-users/"})
     public String getAddUsers(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getAddUsers()");
@@ -37,7 +37,7 @@ public class MultiTenantContextAwareAdminController {
         return "add-users";
     }
 
-    @PostMapping(value = {"/app/{domain}/add-users"})
+    @PostMapping(value = {"/app/{domain}/add-users", "/app/{domain}/add-users/"})
     public RedirectView createUsers(
             @ModelAttribute UserDto userDto) {
         userService.create(userDto);
