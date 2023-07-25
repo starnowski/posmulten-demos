@@ -20,7 +20,7 @@ tables:
     rls_policy:
       name: users_table_rls_policy
       tenant_column:  tenant_id
-      create_tenant_column_for_table: true
+      create_tenant_column_for_table: false
       primary_key_definition:
         name_for_function_that_checks_if_record_exists_in_table: "is_user_exists"
         pk_columns_name_to_type:
@@ -48,60 +48,3 @@ tables:
         table_name: user_info
         foreign_key_primary_key_columns_mappings:
           userId:  user_id
-  - name: comments
-    rls_policy:
-      name: "comments_table_rls_policy"
-      tenant_column:  comment_tenant_id
-      create_tenant_column_for_table: true
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_comments_exists"
-        pk_columns_name_to_type:
-          id: bigint
-    foreign_keys:
-      - constraint_name:  "user_info_tenant_constraint"
-        table_name: user_info
-        foreign_key_primary_key_columns_mappings:
-          userId:  user_id
-      - constraint_name:  "posts_tenant_constraint"
-        table_name: posts
-        foreign_key_primary_key_columns_mappings:
-          post_id:  id
-  - name: categories
-    rls_policy:
-      name: "categories_table_rls_policy"
-      tenant_column:  "categorytenantid"
-      primary_key_definition:
-        name_for_function_that_checks_if_record_exists_in_table: "is_categories_exists"
-        pk_columns_name_to_type:
-          id: bigint
-  - name: posts_categories
-    rls_policy:
-      name: "posts_categories_table_rls_policy"
-      create_tenant_column_for_table: true
-    foreign_keys:
-      - constraint_name:  "posts_tenant_constraint"
-        table_name: "posts"
-        foreign_key_primary_key_columns_mappings:
-          posts_id:  id
-      - constraint_name:  "categories_tenant_constraint"
-        table_name: "categories"
-        foreign_key_primary_key_columns_mappings:
-          categories_id:  id
-  - name: categories_category_types
-    rls_policy:
-      name: "categories_category_types_table_rls_policy"
-      create_tenant_column_for_table: true
-    foreign_keys:
-      - constraint_name:  "categories_tenant_constraint"
-        table_name: "categories"
-        foreign_key_primary_key_columns_mappings:
-          Category_id:  id
-  - name: posts_category_types
-    rls_policy:
-      name: "posts_category_types_table_rls_policy"
-      create_tenant_column_for_table: true
-    foreign_keys:
-      - constraint_name:  "posts_tenant_constraint"
-        table_name: "posts"
-        foreign_key_primary_key_columns_mappings:
-          post_id:  id
