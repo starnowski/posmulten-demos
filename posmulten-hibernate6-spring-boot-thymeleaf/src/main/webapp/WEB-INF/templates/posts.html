@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="nl"
+      class="no-js" layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- /core JS files -->
+</head>
+<body>
+<!-- Insert content into the layouts/layout.html -->
+<section layout:fragment="content">
+    Page for posts!
+
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        <div th:each="post : ${allPosts}" class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne"
+                        th:text="${post.id + ' - ' + post.author.username}">
+                    post id - post author
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body" th:text="${{post.text}}">
+                    Post content
+                </div>
+            </div>
+        </div>
+    </div>
+    <a class="btn btn-outline-dark" th:href="@{/app/{domain}/add-posts/(domain=${domain})}" role="button" name="redirectToPostForm">Add post</a>
+</section>
+</body>
+
+</html>

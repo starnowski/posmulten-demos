@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="nl"
+      class="no-js" layout:decorate="~{layouts/layout}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!-- /core JS files -->
+</head>
+<body>
+<!-- Insert content into the layouts/layout.html -->
+<section layout:fragment="content">
+    Add post
+    <form name="newUserForm" class="form-horizontal" th:action="@{/app/{domain}/add-users/(domain=${domain})}" th:object="${userForm}" method="post">
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Username</label>
+            <div class="col-lg-9">
+                <input type="text" class="form-control" placeholder="Username (as required)" th:field="*{username}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Password</label>
+            <div class="col-lg-9">
+                <input type="password" class="form-control" placeholder="Password (as required)" th:field="*{password}"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Role</label>
+            <div class="col-lg-9">
+                <select id="roles" th:field="*{roles}" size="10" multiple="multiple">
+                    <option th:each="role : ${T(com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.RoleEnum).values()}"
+                            th:value="${role}" th:text="${role}"></option><!--TODO Add message for specific role-->
+                </select>
+            </div>
+        </div>
+        <div class="text-right">
+            <button type="submit" name="submitUser" class="btn btn-primary">Create user<i class="icon-arrow-right14 position-right"></i></button>
+        </div>
+    </form>
+</section>
+</body>
+
+</html>

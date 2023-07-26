@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      lang="nl" class="no-js"
+      layout:decorate="~{layouts/entry}">
+
+<head>
+    <title>Error page</title>
+
+    <!-- Theme JS files -->
+    <!-- /theme JS files -->
+</head>
+
+
+<!--Important area-->
+<div layout:fragment="content">
+    <!-- Error title -->
+    <div class="text-center content-group">
+        <h1 class="error-title">Error</h1>
+        <h5>Oops, an error has occurred.</h5>
+    </div>
+    <!-- /error title -->
+
+
+    <!-- Error content -->
+    <div class="row">
+        <div class="col-lg-4 col-lg-offset-4 col-sm-6 col-sm-offset-3">
+            <div th:if="${tenant}" class="text-center">
+                <a th:href="@{/app/{domain}/(domain=${domain})}" class="btn bg-pink-400"><i class="icon-circle-left2 position-left"></i> Back home</a>
+            </div>
+            <div th:unless="${tenant}" class="text-center">
+                <a href="/" class="btn bg-pink-400"><i class="icon-circle-left2 position-left"></i> Back home</a>
+            </div>
+        </div>
+    </div>
+    <!-- /error wrapper -->
+</div>
+<!--/important area-->
