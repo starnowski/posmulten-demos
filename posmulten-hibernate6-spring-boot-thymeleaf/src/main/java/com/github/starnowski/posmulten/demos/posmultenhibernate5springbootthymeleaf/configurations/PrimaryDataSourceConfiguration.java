@@ -100,8 +100,6 @@ public class PrimaryDataSourceConfiguration {
                 "hibernate.connection.username", primaryDataSourceProperties().getUsername());
         hibernateProperties.setProperty(
                 "hibernate.connection.password", primaryDataSourceProperties().getPassword());
-        //org.hibernate.HibernateException: The internal connection pool has reached its maximum size and no connection is currently available!
-        hibernateProperties.put("hibernate.connection.pool_size", "600");//TODO Lower
         return hibernateProperties;
     }
 
