@@ -44,7 +44,6 @@
             <groupId>com.github.starnowski.posmulten.configuration</groupId>
             <artifactId>configuration-yaml-interpreter</artifactId>
             <version>0.7.2</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
