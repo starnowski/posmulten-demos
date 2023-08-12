@@ -32,7 +32,7 @@
             <label class="col-lg-3 control-label">Role</label>
             <div class="col-lg-9">
                 <select id="roles" th:field="*{roles}" size="10" multiple="multiple">
-                    <option th:each="role : ${T(com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util.RoleEnum).values()}"
+                    <option th:each="role : ${T(com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.util.RoleEnum).values()}"
                             th:value="${role}" th:text="${role}"></option><!--TODO Add message for specific role-->
                 </select>
             </div>

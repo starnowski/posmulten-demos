@@ -118,26 +118,26 @@ We can observe that posts for the first domain are not being displayed.
 As for things in the code that might be interesting from the developers' perspective.
 Packages like:
 
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.dto
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.forms
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.mappers
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.model
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.repositories
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.services
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.security
-- com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.controllers
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.dto
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.forms
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.mappers
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.model
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.repositories
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.services
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.security
+- com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.controllers
 
 contains mostly business logic. 
 So maybe besides usage of com.github.starnowski.posmulten.hibernate.core.TenantTable annotation in the model package you would not see any things that you would not see in other Spring-boot projects.
 
-All configurations are being stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations package.
+All configurations are being stored in com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.configurations package.
 What is interesting from a developer standpoint are two configurations, [PrimaryDataSourceConfiguration](#main-configuration), and [OwnerDataSourceConfiguration](#test-configuration) (this one in tests resources).
 It is also recommended to check the WebSecurityConfig configuration. To find out how filters are defined, and in what order.
 Or how handlers for login and logout were added. No to mention request matcher patterns. 
 
-The [Http filters](#http-filters) are stored in com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.filters package.
+The [Http filters](#http-filters) are stored in com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.filters package.
 
-As for com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.util package, the DomainResolver class might worth to check.
+As for com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.util package, the DomainResolver class might worth to check.
 
 ## Hibernate configurations
 
@@ -145,14 +145,14 @@ One of the most important configuration types for this project is JPA configurat
 
 ### Main configuration
 
-The com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn sets primary database component that will be used in production code.
+The com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn sets primary database component that will be used in production code.
 As for database users, it can not be a user with an admin role from a Postgres database perspective.
 Posmulten-hibernate library requires of usage of the Row Level Security policy mechanism that does not work for database admin users.
 
 ### Test configuration
 
 The com.github.starnowski.posmulten.demos.posmultenhibernate5 springboot thymeleaf.configurations.OwnerDataSourceConfiguration configuration is design for tests purpose.
-It should exists in the same Spring context as com.github.starnowski.posmulten.demos.posmultenhibernate5springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn.
+It should exists in the same Spring context as com.github.starnowski.posmulten.demos.posmultenhibernate6springbootthymeleaf.configurations.PrimaryDataSourceConfiguration configuratiopn.
 Database user used by this configuration can be admin user or any other database that has priviliges to create function or add Row Level Security policies.
 
 ## Http filters
