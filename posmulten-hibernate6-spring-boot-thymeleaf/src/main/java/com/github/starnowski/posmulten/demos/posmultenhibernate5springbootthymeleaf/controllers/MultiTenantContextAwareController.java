@@ -22,7 +22,7 @@ public class MultiTenantContextAwareController {
     @Autowired
     private SecurityServiceImpl securityService;
 
-    @GetMapping(value = {"/login"})
+    @GetMapping(value = {"/login", "/login/"})
     public String getLogin(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getLogin()");
@@ -38,7 +38,7 @@ public class MultiTenantContextAwareController {
         return "index";
     }
 
-    @GetMapping(value = {"/hello"})
+    @GetMapping(value = {"/hello", "/hello/"})
     public String getHello(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getHome()");
@@ -46,7 +46,7 @@ public class MultiTenantContextAwareController {
         return "hello-template";
     }
 
-    @GetMapping(value = {"/config"})
+    @GetMapping(value = {"/config", "/config/"})
     public String getConfig(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getHome()");
@@ -54,7 +54,7 @@ public class MultiTenantContextAwareController {
         return "config-page";
     }
 
-    @GetMapping(value = {"/posts"})
+    @GetMapping(value = {"/posts", "/posts/"})
     public String getPosts(
             @PathVariable("domain") String domain, Model model) {
         log.debug("String getPosts()");
