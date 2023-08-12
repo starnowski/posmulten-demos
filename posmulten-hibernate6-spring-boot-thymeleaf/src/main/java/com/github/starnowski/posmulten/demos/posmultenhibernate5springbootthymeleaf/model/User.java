@@ -26,6 +26,6 @@ public class User {
     private UUID userId;
     private String username;
     private String password;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserRole> roles;
 }
