@@ -29,7 +29,7 @@
         <webjars.jquery.version>3.6.0</webjars.jquery.version>
         <webjars.webjars-locator.version>0.45</webjars.webjars-locator.version>
         <com.github.starnowski.posmulten.hibernate.version>0.2.2</com.github.starnowski.posmulten.hibernate.version>
-        <org.postgresql.postgresql.version>42.3.8</org.postgresql.postgresql.version>
+        <org.postgresql.postgresql.version>42.7.2</org.postgresql.postgresql.version>
         <net.sourceforge.htmlunit.version>2.70.0</net.sourceforge.htmlunit.version>
     </properties>
 
